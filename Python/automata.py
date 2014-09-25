@@ -25,8 +25,7 @@ class Automata():
       visitados.append(e)
       eliminar=[]
       for trans in viejasTransiciones:
-        print trans,e
-        if (trans[0]==e):
+        if (trans[0]==e and trans not in nuevasTransiciones):
           nuevasTransiciones.append(trans)
           eliminar.append(trans)
           if(trans[1] not in visitados):
@@ -41,3 +40,27 @@ class Automata():
         interseccion.append(n)
     self.estadosFinales=interseccion
     self.transiciones=nuevasTransiciones
+
+  def tabular(self):
+    cabecera=["    "]+self.alfabeto
+    tabla=[]
+    for estado in self.estados:
+      linea=[estado]
+      if estado in self.estadosFinales:
+        linea=["*"+linea[0]]
+      else:
+        linea=[" "+linea[0]]
+      if estado == self.estadoInicial:
+        linea=["->"+linea[0]]
+      else:
+        linea=["  "+linea[0]]
+      for simbolo in self.alfabeto:
+        for trans in self.transiciones:
+          if (trans[0]==estado and trans[2]==simbolo):
+            linea=linea+[trans[1]]
+            continue
+      if linea not in tabla:
+        tabla.append(linea)
+    print cabecera
+    for fila in tabla:
+      print fila
