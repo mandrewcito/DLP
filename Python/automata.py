@@ -41,7 +41,7 @@ class Automata():
     self.estadosFinales=interseccion
     self.transiciones=nuevasTransiciones
 
-  def tabular(self):
+  def tabular(self,png):
     cabecera=["    "]+self.alfabeto
     tabla=[]
     for estado in self.estados:
@@ -64,3 +64,28 @@ class Automata():
     print cabecera
     for fila in tabla:
       print fila
+    print png
+    if png ==True:
+      print "creando grafo"
+      inicio="digraph G { \n"
+      fin="}"
+      cuerpo=""
+      for trans in self.transiciones : 
+        cuerpo+=trans[0]+"->"+trans[1]+"[label=\""+trans[2]+"\"]"+";\n"
+      finales=""
+      for e in self.estados:
+        finales+=e+"["
+        if e ==self.estadoInicial:
+          finales+="color=lightblue"
+          if e in self.estadosFinales:
+            finales+=",peripheries=2"
+        elif e in self.estadosFinales:
+          finales+="peripheries=2"
+        finales+="];\n"
+      f = open ("fichero.txt", "w")
+      f.write(inicio)
+      f.write(cuerpo)
+      f.write(finales)
+      f.write(fin)
+      f.close()
+
