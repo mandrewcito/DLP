@@ -1,13 +1,15 @@
 #/usr/bin/env python
 # -*- cofing: utf-8 -*-
 from automata import Automata
+import os
 fichero=raw_input("introduce nombre fichero configuracion\n")
 a=Automata(fichero)
-png=True
 print "forma tabular del automata\n"
-a.tabular(png)
+a.tabular("AFD")
+os.system("dot AFD-conf.txt -Tpng -o AFD.png")
 a.minimoConexo()
 print "forma tabular del minimo conexo\n"
-a.tabular(png)
-
+a.tabular("AFD-conexo")
+a.tabular("AFD-conexo")
+os.system("dot AFD-conexo-conf.txt -Tpng -o AFD-conexo.png")
 
