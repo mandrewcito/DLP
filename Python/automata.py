@@ -71,19 +71,14 @@ class Automata():
     for trans in self.transiciones : 
       cuerpo+=trans[0]+"->"+trans[1]+"[label=\""+trans[2]+"\"]"+";\n"
     finales=""
-    for e in self.estados:
-      finales+=e+"["
-      if e ==self.estadoInicial:
-        finales+="color=lightblue"
-        if e in self.estadosFinales:
-          finales+=",peripheries=2"
-      elif e in self.estadosFinales:
-        finales+="peripheries=2"
-      finales+="];\n"
+    for e in self.estadosFinales:
+      finales+=e+"[peripheries=2];\n"
+    inicial="node [style=invis]; 00;\n 00->"+self.estadoInicial+";"
     f = open (png+"-conf.txt", "w")
     f.write(inicio)
     f.write(cuerpo)
     f.write(finales)
+    f.write(inicial)
     f.write(fin)
     f.close()
 

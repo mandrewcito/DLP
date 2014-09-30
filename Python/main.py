@@ -7,9 +7,10 @@ a=Automata(fichero)
 print "forma tabular del automata\n"
 a.tabular("AFD")
 os.system("dot AFD-conf.txt -Tpng -o AFD.png")
+os.system("eog AFD.png")
 a.minimoConexo()
 print "forma tabular del minimo conexo\n"
 a.tabular("AFD-conexo")
-a.tabular("AFD-conexo")
 os.system("dot AFD-conexo-conf.txt -Tpng -o AFD-conexo.png")
+os.system("eog AFD-conexo.png")
 
