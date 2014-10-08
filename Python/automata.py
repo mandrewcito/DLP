@@ -25,10 +25,10 @@ class Automata():
       visitados.append(e)
       eliminar=[]
       for trans in viejasTransiciones:
-        if (trans[0]==e and trans not in nuevasTransiciones):
+        if (trans[0]==e):
           nuevasTransiciones.append(trans)
           eliminar.append(trans)
-          if(trans[1] not in visitados):
+          if(trans[1] not in visitados and trans[1] not in colaEstados):
             colaEstados.append(trans[1])
       for e in eliminar:
         viejasTransiciones.remove(e)
@@ -64,6 +64,8 @@ class Automata():
     print cabecera
     for fila in tabla:
       print fila
+
+  def grafo(self,png):
     print "creando grafo"
     inicio="digraph G { \n"
     fin="}"
@@ -81,4 +83,3 @@ class Automata():
     f.write(inicial)
     f.write(fin)
     f.close()
-
