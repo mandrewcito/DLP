@@ -1,4 +1,4 @@
-//#define NDEBUG
+#define NDEBUG
 
 #include "automata.h"
 #include "dbg.h"
@@ -16,7 +16,7 @@ int afd_init(struct afd **afd)
 	if(!(*afd))
 	{
 		perror("calloc");
-		return 1;
+		return -1;
 	}
 
 	return 0;
@@ -41,8 +41,14 @@ int afd_fread(struct afd *afd, FILE *f)
 {
 	if(fgets(afd->buffer, MAX_LINE, f) == NULL)
 	{
-		perror("fgets");
-		return 1;
+		debug("fgets no leyó nada");
+		return -1;
+	}
+	debug("Máximo %d, leído %lu", MAX_LINE, strnlen(afd->buffer, MAX_LINE-2));
+	if(strnlen(afd->buffer, MAX_LINE-1) == (MAX_LINE-1))
+	{
+		debug("Línea demasiado larga. Máximo %d caracteres", MAX_LINE-2);
+		return -1;
 	}
 	afd->buffer[strlen(afd->buffer) - 1] = '\0';
 	return 0;
@@ -69,13 +75,13 @@ static int afd_parse_list(struct list_t *l, char *str)
 	debug("afd_parse_list(, %s)", str);
 	p = strtok_r(str, " ", &save);
 
-	while(p != NULL)
+	while(p)
 	{
 		debug("Nuevo elemento %s", p);
-		if(list_add(l, p) != 0)
+		if(list_add(l, p))
 		{
 			debug("list_add");
-			return 1;
+			return -1;
 		}
 
 		p = strtok_r(NULL, " ", &save);
@@ -94,6 +100,12 @@ static int afd_parse_tran_str(struct afd_tran *tran, char *str)
 	tran->fin = strtok_r(NULL, " ", &save);
 	tran->sym = strtok_r(NULL, " ", &save);
 
+	if(!tran->ini || !tran->fin || !tran->sym)
+	{
+		debug("afd_parse_tran_str");
+		return -1;
+	}
+
 	return 0;
 }
 
@@ -103,21 +115,25 @@ static int afd_parse_trans(struct list_t *l, char *str, char **save)
 	struct afd_tran *tran;
 	p = strtok_r(NULL, ";", save);
 
-	while(p != NULL)
+	while(p)
 	{
-		debug("Nuevo elemento %s", p);
-		if((tran = malloc(sizeof(struct afd_tran))) == NULL)
+		debug("Nueva transición %s", p);
+		if(!(tran = malloc(sizeof(struct afd_tran))))
 		{
 			debug("malloc");
-			return 1;
+			return -1;
 		}
 
-		afd_parse_tran_str(tran, p);
+		if(afd_parse_tran_str(tran, p))
+		{
+			debug("afd_parse_tran_str");
+			return -1;
+		}
 
-		if(list_add(l, tran) != 0)
+		if(list_add(l, tran))
 		{
 			debug("list_add");
-			return 1;
+			return -1;
 		}
 
 		p = strtok_r(NULL, ";", save);
@@ -133,10 +149,10 @@ static int afd_parse_sti(struct afd *afd, char *str)
 	char *p, *save;
 	p = strtok_r(str, " ", &save);
 
-	if(p == NULL)
+	if(!p)
 	{
 		debug("Estado inicial no encontrado");
-		return 1;
+		return -1;
 	}
 
 	afd->sti = p;
@@ -144,31 +160,58 @@ static int afd_parse_sti(struct afd *afd, char *str)
 	return 0;
 }
 
-static void afd_print_dot_tran(void *ptr)
+static void afd_print_dot_tran(struct afd *afd, void *ref)
 {
-	struct afd_tran *tran = (struct afd_tran *) ptr;
-	printf("\t\"%s\" -> \"%s\" [label = \"%s\"];\n",
-		tran->ini, tran->fin, tran->sym);
+	struct afd_tran *tran;
+	struct list_node_t * node;
+
+	for(node = afd->trans.start; node != NULL; node = node->next)
+	{
+		tran = (struct afd_tran *) node->ptr;
+		printf("\t\t\"%p-%s\" -> \"%p-%s\" [label = \"%s\"];\n",
+			ref, tran->ini, ref,  tran->fin, tran->sym);
+		printf("\t\t\"%p-%s\" [label = \"%s\"];\n",
+			ref, tran->ini, tran->ini);
+		printf("\t\t\"%p-%s\" [label = \"%s\"];\n",
+			ref, tran->fin, tran->fin);
+	}
 }
 
-static void afd_print_dot_stf(void *ptr)
+static void afd_print_dot_stf(struct afd *afd, void *ref)
 {
-	char *stf = (char *) ptr;
-	printf("\t\"%s\" [peripheries = 2];\n", stf);
+	char *st;
+	struct list_node_t * node;
+
+	for(node = afd->stf.start; node != NULL; node = node->next)
+	{
+		st = (char *) node->ptr;
+		printf("\t\t\"%p-%s\" [peripheries = 2];\n", ref, st);
+	}
 }
 
-int afd_print_dot(struct afd *afd)
+void afd_print_dot_subgraph(struct afd *afd, char *title)
 {
-	printf("digraph G {\n");
+	printf("\tsubgraph \"cluster%p\" {\n", title);
 
-	list_map(&afd->trans, afd_print_dot_tran);
-	list_map(&afd->stf, afd_print_dot_stf);
-	printf("\tSTART_NODE [style = invis];\n");
-	printf("\tSTART_NODE -> \"%s\";\n", afd->sti);
+	afd_print_dot_tran(afd, title);
+	afd_print_dot_stf(afd, title);
+	printf("\t\t\"%p-START_NODE\" [style = invis];\n", title);
+	printf("\t\t\"%p-START_NODE\" -> \"%p-%s\";\n", title, title, afd->sti);
+	
+	printf("\t\tlabel = \"%s\";\n", title);
 
-	printf("}\n");
+	printf("\t}\n");
+}
 
-	return 0;
+void afd_print_dot_start()
+{
+	printf("digraph {\n");
+	printf("\tcompound=true;\n");
+}
+
+void afd_print_dot_end()
+{
+	printf("}");
 }
 
 int afd_parse(struct afd *afd)
@@ -181,7 +224,7 @@ int afd_parse(struct afd *afd)
 	if(afd_parse_list(&afd->st, p) != 0)
 	{
 		debug("afd_parse_list");
-		return 1;
+		return -1;
 	}
 	
 	p = strtok_r(NULL, ";", &save);
@@ -189,22 +232,30 @@ int afd_parse(struct afd *afd)
 	if(afd_parse_list(&afd->alfa, p) != 0)
 	{
 		debug("afd_parse_list");
-		return 1;
+		return -1;
 	}
 	
 	p = strtok_r(NULL, ";", &save);
 
-	afd_parse_sti(afd, p);
+	if(afd_parse_sti(afd, p))
+	{
+		debug("afd_parse_sti");
+		return -1;
+	}
 	
 	p = strtok_r(NULL, ";", &save);
 
 	if(afd_parse_list(&afd->stf, p) != 0)
 	{
 		debug("afd_parse_list");
-		return 1;
+		return -1;
 	}
 
-	afd_parse_trans(&afd->trans, p, &save);
+	if(afd_parse_trans(&afd->trans, p, &save))
+	{
+		debug("afd_parse_trans");
+		return -1;
+	}
 
 	return 0;
 }
@@ -227,31 +278,54 @@ int afd_reduce(struct afd *afd)
 	list_empty(&visitados);
 	list_empty(&nuevas_trans);
 
-	queue_push(&estados, afd->sti);
-	list_add(&visitados, afd->sti);
+	if(queue_push(&estados, afd->sti))
+	{
+		debug("queue_push");
+		return -1;
+	}
+	
+	if(list_add(&visitados, afd->sti))
+	{
+		debug("list_add");
+		return -1;
+	}
+
 	while(!queue_pop(&estados, &st))
 	{
+		debug("Estado %s", (char *) st);
 		for(node = afd->trans.start; node != NULL; node = node->next)
 		{
-			debug("Coger transición %p", node->ptr);
+			debug("Transición %p", node->ptr);
+#ifndef NDEBUG
 			afd_print_tran(node->ptr);
+#endif
 			tran = (struct afd_tran *) node->ptr;
-			debug("tran->ini = %s", tran->ini);
-			debug("st = %s", (char *) st);
 			if(strcmp(tran->ini, st) == 0)
 			{
-				debug("Estado inicial = %s", tran->ini);
 				if((tran2 = malloc(sizeof(struct afd_tran))) == NULL)
 				{
-					return 1;
+					perror("malloc");
+					return -1;
 				}
 				memcpy(tran2, tran, sizeof(struct afd_tran));
-				list_add(&nuevas_trans, tran2);
+				if(list_add(&nuevas_trans, tran2))
+				{
+					debug("list_add");
+					return -1;
+				}
 				if(list_find(&visitados, tran2->fin, afd_cmp) == NULL)
 				{
 					debug("Añadiendo %s a visitados", tran2->fin);
-					list_add(&visitados, tran2->fin);
-					queue_push(&estados, tran2->fin);
+					if(list_add(&visitados, tran2->fin))
+					{
+						debug("list_add");
+						return -1;
+					}
+					if(queue_push(&estados, tran2->fin))
+					{
+						debug("queue_push");
+						return -1;
+					}
 				}
 			}
 		}
@@ -275,21 +349,37 @@ int main(int argc, char *argv[])
 	struct afd *afd;
 	
 	// TODO comprobaciones
-	afd_init(&afd);
-	afd_fread(afd, stdin);
+	if(afd_init(&afd))
+	{
+		debug("afd_init");
+		return 1;
+	}
+	if(afd_fread(afd, stdin))
+	{
+		debug("afd_fread");
+		return 1;
+	}
+	
 	debug("Buffer %s", afd->buffer);
 
-	if(afd_parse(afd) != 0)
+	if(afd_parse(afd))
 	{
 		debug("afd_parse");
 		return 1;
 	}
 
-	afd_print_dot(afd);
+	afd_print_dot_start();
 
-	afd_reduce(afd);
+	afd_print_dot_subgraph(afd, "Original");
+
+	if(afd_reduce(afd))
+	{
+		return 1;
+	}
 	
-	afd_print_dot(afd);
+	afd_print_dot_subgraph(afd, "Mínimo conexo");
+
+	afd_print_dot_end();
 
 	afd_free(afd);
 

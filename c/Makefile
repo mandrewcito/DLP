@@ -10,5 +10,5 @@ clean:
 	rm -f *.o automata
 
 test: automata
-	cat ../test/conf.txt | ./automata | dot -Tpng -o ../test/dot.png
+	cat ../test/conf-isla.txt | ./automata | dot -Tpng -o ../test/dot.png
 	firefox ../test/dot.png &
