@@ -209,6 +209,67 @@ int afd_parse(struct afd *afd)
 	return 0;
 }
 
+int afd_cmp(const void *a, const void *b)
+{
+	return strcmp((const char *) a, (const char *) b);
+}
+
+int afd_reduce(struct afd *afd)
+{
+	struct queue_t estados;
+	struct list_t visitados;
+	struct list_t nuevas_trans;
+	struct list_node_t *node;
+	struct afd_tran *tran, *tran2;
+	void *st;
+
+	queue_empty(&estados);
+	list_empty(&visitados);
+	list_empty(&nuevas_trans);
+
+	queue_push(&estados, afd->sti);
+	list_add(&visitados, afd->sti);
+	while(!queue_pop(&estados, &st))
+	{
+		for(node = afd->trans.start; node != NULL; node = node->next)
+		{
+			debug("Coger transición %p", node->ptr);
+			afd_print_tran(node->ptr);
+			tran = (struct afd_tran *) node->ptr;
+			debug("tran->ini = %s", tran->ini);
+			debug("st = %s", (char *) st);
+			if(strcmp(tran->ini, st) == 0)
+			{
+				debug("Estado inicial = %s", tran->ini);
+				if((tran2 = malloc(sizeof(struct afd_tran))) == NULL)
+				{
+					return 1;
+				}
+				memcpy(tran2, tran, sizeof(struct afd_tran));
+				list_add(&nuevas_trans, tran2);
+				if(list_find(&visitados, tran2->fin, afd_cmp) == NULL)
+				{
+					debug("Añadiendo %s a visitados", tran2->fin);
+					list_add(&visitados, tran2->fin);
+					queue_push(&estados, tran2->fin);
+				}
+			}
+		}
+	}
+
+#ifndef NDEBUG
+	debug("Antiguas transiciones");
+	list_map(&afd->trans, afd_print_tran);
+	debug("Nuevas transiciones");
+	list_map(&nuevas_trans, afd_print_tran);
+#endif
+	list_clear_func(&afd->trans, afd_free_tran);
+	list_clear(&visitados);
+	memcpy(&afd->trans, &nuevas_trans, sizeof(struct list_t));
+	
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	struct afd *afd;
@@ -224,6 +285,10 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	afd_print_dot(afd);
+
+	afd_reduce(afd);
+	
 	afd_print_dot(afd);
 
 	afd_free(afd);
