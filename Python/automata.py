@@ -1,3 +1,4 @@
+from transiciones import Transicion
 class Automata():
   def __init__(self,ficheroConfiguracion):
     f=open(ficheroConfiguracion)
@@ -11,7 +12,8 @@ class Automata():
     self.estadosFinales=f[3][1:].split(" ")
     self.transiciones=[]
     for e in f[4:]:
-      self.transiciones.append(e[1:].split(" "))
+      trans=e[1:].split(" ")
+      self.transiciones.append(Transicion(trans[0],trans[1],trans[2]))
 
   def minimoConexo(self):
     colaEstados=[]
@@ -25,11 +27,11 @@ class Automata():
       visitados.append(e)
       eliminar=[]
       for trans in viejasTransiciones:
-        if (trans[0]==e):
+        if (trans.ini==e):
           nuevasTransiciones.append(trans)
           eliminar.append(trans)
-          if(trans[1] not in visitados and trans[1] not in colaEstados):
-            colaEstados.append(trans[1])
+          if(trans.fin not in visitados and trans.fin not in colaEstados):
+            colaEstados.append(trans.fin)
       for e in eliminar:
         viejasTransiciones.remove(e)
       eliminar=[]
@@ -56,8 +58,8 @@ class Automata():
         linea=["  "+linea[0]]
       for simbolo in self.alfabeto:
         for trans in self.transiciones:
-          if (trans[0]==estado and trans[2]==simbolo):
-            linea=linea+[trans[1]]
+          if (trans.ini==estado and trans.simb==simbolo):
+            linea=linea+[trans.fin]
             continue
       if linea not in tabla:
         tabla.append(linea)
@@ -71,7 +73,7 @@ class Automata():
     fin="}"
     cuerpo=""
     for trans in self.transiciones : 
-      cuerpo+=trans[0]+"->"+trans[1]+"[label=\""+trans[2]+"\"]"+";\n"
+      cuerpo+=trans.ini+"->"+trans.fin+"[label=\""+trans.simb+"\"]"+";\n"
     finales=""
     for e in self.estadosFinales:
       finales+=e+"[peripheries=2];\n"
