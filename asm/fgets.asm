@@ -1,0 +1,2 @@
+	extern fgets
+	global main
