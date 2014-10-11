@@ -62,7 +62,7 @@ static void afd_print_str(void *s)
 	debug("%s", (char *) s);
 }
 
-static void afd_print_tran(void *ptr)
+void afd_print_tran(void *ptr)
 {
 	struct afd_tran *t = (struct afd_tran *) ptr;
 	debug("%s -- %s --> %s", t->ini, t->sym, t->fin);
