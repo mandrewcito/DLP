@@ -1,4 +1,4 @@
-#define NDEBUG
+//#define NDEBUG
 
 #include "automata.h"
 #include "reduce.h"
@@ -275,6 +275,8 @@ int afd_reduce(struct afd *afd)
 	struct afd_tran *tran, *tran2;
 	void *st;
 
+	debug("AFD ptr = %p", afd);
+
 	queue_empty(&estados);
 	list_empty(&visitados);
 	list_empty(&nuevas_trans);
@@ -373,12 +375,18 @@ int main(int argc, char *argv[])
 
 	afd_print_dot_subgraph(afd, "Original");
 
+	debug("Antes de afd_reduce_asm &(%p) afd->sti[0] = %c", &afd->sti, afd->sti[0]);
+/*
 	if(afd_reduce(afd))
 	{
 		return 1;
 	}
-
-	afd_reduce_asm();
+*/
+	if(afd_reduce_asm(afd))
+	{
+		debug("------ ERROR EN ASM ------");
+		return 1;
+	}
 	
 	afd_print_dot_subgraph(afd, "Mínimo conexo");
 

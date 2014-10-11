@@ -1,4 +1,4 @@
-#define NDEBUG
+//#define NDEBUG
 
 #include "queue.h"
 
@@ -9,6 +9,7 @@
 /* Empty queue */
 void queue_empty(struct queue_t *queue)
 {
+	debug("queue = %p", queue);
 	queue->start = NULL;
 	queue->end = NULL;
 }
@@ -68,7 +69,7 @@ int queue_node_init(struct queue_node_t **node_addr, void *ptr)
 	*node_addr = calloc(1, sizeof(struct queue_node_t));
 	return_if(!*node_addr, -1);
 
-	debug("New node %p with ptr=%p", *node_addr, ptr);
+	debug("New node %p with ptr=%p [%c]", *node_addr, ptr, *((char*)ptr));
 	(*node_addr)->ptr = ptr;
 	return 0;
 }
