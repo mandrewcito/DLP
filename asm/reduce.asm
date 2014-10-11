@@ -1,4 +1,7 @@
 	global afd_reduce_asm
+
+;%define DEBUG
+
 	extern afd_print_tran
 	extern afd_cmp
 	extern afd_free_tran
@@ -131,11 +134,13 @@ while_start:
 
 ;Dentro del bucle while
 
+%ifdef DEBUG
 ;printf("Estado st = %s\n");
 	mov	rdi, S_st
 	mov	rsi, [rbp - st]
 	mov	eax, 0
 	call	printf
+%endif
 
 ;for(node = afd->trans.start; node != NULL; node = node->next)
 ;Uso rax como contador node.
@@ -151,10 +156,12 @@ for_start:
 	cmp	qword [rbp - node], 0
 	je	for_end
 
+%ifdef DEBUG
 ;Muestro la transición
 	mov	rax, [rbp-node]
 	mov	rdi, [rax+list_node_t.ptr]
 	call	afd_print_tran
+%endif
 
 ;tran = (struct afd_tran *) node->ptr;
 	mov	rax, [rbp-node]
@@ -170,12 +177,14 @@ for_start:
 	cmp	rax, 0
 	jne	if_end
 
+%ifdef DEBUG
 ;printf("st = %s", tran->ini)
 	mov	rdi, S_st2
 	mov	rax, [rbp-tran]
 	mov	rsi, [rax+afd_tran.ini]
 	mov	eax, 0
 	call	printf
+%endif
 
 ;malloc(sizeof(struct afd_tran))
 	mov	rdi, afd_tran_size	;rdi / edi ?
@@ -214,12 +223,14 @@ for_start:
 	cmp	rax, 0
 	jne	if_end
 
+%ifdef DEBUG
 ;printf("Añadiendo %s a visitados\n", tran2->fin)
 	mov	rdi, S_st_add
 	mov	rax, [rbp-tran2]
 	mov     rsi, [rax+afd_tran.fin]
 	mov	rax, 0
 	call	printf
+%endif
 
 ;list_add(&visitados, tran2->fin)
 	lea	rdi, [rbp-visitados]
@@ -256,6 +267,7 @@ for_end:
 while_end:
 
 ;Mostrar los resultados
+%ifdef DEBUG
 ;printf("Antiguas transiciones");
 	mov	rdi, S_antiguas
 	mov	rax, 0
@@ -267,7 +279,6 @@ while_end:
 	mov	rsi, afd_print_tran
 	call	list_map
 
-
 ;printf("Nuevas transiciones");
 	mov	rdi, S_nuevas
 	mov	rax, 0
@@ -277,6 +288,7 @@ while_end:
 	lea	rdi, [rbp-nuevas_trans]
 	mov	rsi, afd_print_tran
 	call	list_map
+%endif
 
 ;Liberar memoria
 ;list_clear_func(&afd->trans, afd_free_tran);
@@ -299,37 +311,32 @@ while_end:
 ;salir
 	jmp	normal_exit
 
-;Almacenar rax y rcx
-;	push	rax
-;	push	rcx
-
 
 error_exit:
 
-;Mostrar el valor de la pila
+%ifdef DEBUG
+;Mostrar error
 	mov	rax, 0
 	mov	rdi, S_error
 	call	printf
+%endif
+
+;return -1
 	mov	eax, -1
 	jmp	return
-
-;Recuperar rcx y rax
-;	pop     rcx
-;	pop     rax
 
 
 normal_exit:
 	xor	rax, rax
-;	mov	eax, 0
-return:
 
+return:
 	leave
-	
 	ret
 
+
+;Mensajes
 message:
 	db	`ASM has the power now. ptr = %p\n`, 0
-
 afd_sti:
 	db	`afd->sti = %s\n`, 0
 S_error:
