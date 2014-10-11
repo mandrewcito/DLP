@@ -17,3 +17,7 @@ stdin:	stdin.o
 
 clean:
 	rm *.o hello read automata stdin
+
+test: automata
+	cat ../test/conf-isla.txt | ./automata | dot -Tpng -o ../test/dot.png
+	firefox ../test/dot.png &
