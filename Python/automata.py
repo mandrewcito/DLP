@@ -69,19 +69,22 @@ class Automata():
 
   def grafo(self,png):
     print "creando grafo"
-    inicio="digraph G { \n"
+    inicio="subgraph \""+png+"\" { \n"
     fin="}"
     cuerpo=""
     for trans in self.transiciones : 
-      cuerpo+=trans.ini+"->"+trans.fin+"[label=\""+trans.simb+"\"]"+";\n"
+      cuerpo+="\""+png+"-"+trans.ini+"\"->\""+png+"-"+trans.fin+"\"[label=\""+trans.simb+"\"]"+";\n"
     finales=""
     for e in self.estadosFinales:
-      finales+=e+"[peripheries=2];\n"
-    inicial="node [style=invis]; 00;\n 00->"+self.estadoInicial+";"
+      finales+="\""+png+"-"+e+"\"[peripheries=2];\n"
+    inicial="node [style=invis]; \""+png+"-00\";\n \""+png+"-00\"->\""+png+"-"+self.estadoInicial+"\";"
     f = open (png+"-conf.txt", "w")
     f.write(inicio)
     f.write(cuerpo)
     f.write(finales)
+    for e in self.estados:
+      f.write("\""+png+"-"+e+"\"[label = \""+e+"\"];")
     f.write(inicial)
+    f.write("label = \""+png+"\";")
     f.write(fin)
     f.close()
