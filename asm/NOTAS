@@ -1,0 +1,26 @@
+# Preliminares.
+
+Instalar Nasm. Observar alguno códigos de ejemplo. Comprender llamadas al
+sistema. Construir hola mundo con llamadas al kernel. Luego con llamadas a libc.
+
+Determinar la region a construir con asm. Por ahora sólo el algoritmo
+afd_reduce. Aprender cómo se pasan las direcciones entre funciones. Los 6
+primeros parámetros van directamente en registros.
+
+Crear una función que recibe un parámetro y muestra sus contenido con printf.
+Observar que funciona correctamente. Aprender como se reserva espacio para
+variables locales. En que consiste la red zone [1]. Crear estructuras para poder
+organizar la memoria en asm. Comprender la diferencia entre arquitecturas de 32
+y 64 bits. Diferencia entre rsp y rbp. Aprender instrucción leave.
+
+Diferencia entre lea y mov. Problemas al mostrar el estado. Parece que se ha
+sobreescrito dicha sección de la memoria. Reparado!
+
+Funcionamiento de je, jne, jmp. Registros como argumentos: rdi, rsi, rdx, rcx,
+r8, r9. Etiquetas por todas partes. Alcanzado la mitad del algoritmo. Gdb y
+valgrind ayudan en la depuración. Comprender diferencia de espacio entre:
+	mov	rax, 0
+	xor	rax, rax
+Éste último ocupa 3 bytes menos.
+
+[1] Stack: http://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64/
