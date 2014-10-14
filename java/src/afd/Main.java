@@ -27,7 +27,7 @@ public class Main {
         }
 	}
 	public static void main(String[] args) {
-		Automata a = new Automata("conf-isla.txt");
+		Automata a = new Automata(args[0]);
 		System.out.println(a);
 		escribeFichero("conf-dot.txt","digraph{\ncompound=true;\n ",false);
 		escribeFichero("conf-dot.txt",a.generaDot("AFD"),true);
