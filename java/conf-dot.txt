@@ -1,0 +1,34 @@
+digraph{
+compound=true;
+ 
+subgraph "AFD" { 
+"AFD-4"->"AFD-5"[label="a"];
+"AFD-0"->"AFD-1"[label="a"];
+"AFD-0"->"AFD-2"[label="b"];
+"AFD-1"->"AFD-3"[label="a"];
+"AFD-1"->"AFD-2"[label="b"];
+"AFD-2"->"AFD-1"[label="a"];
+"AFD-2"->"AFD-2"[label="b"];
+"AFD-3"->"AFD-3"[label="a"];
+"AFD-3"->"AFD-1"[label="b"];
+"AFD-1"[peripheries=2];
+"AFD-2"[peripheries=2];
+"AFD-3"[peripheries=2];
+"AFD-0"[label = "0"];"AFD-1"[label = "1"];"AFD-2"[label = "2"];"AFD-3"[label = "3"];"AFD-4"[label = "4"];"AFD-5"[label = "5"];node [style=invis]; "AFD-00";
+ "AFD-00"->"AFD-0";label = "AFD";}
+subgraph "AFD-conexo" { 
+"AFD-conexo-0"->"AFD-conexo-1"[label="a"];
+"AFD-conexo-0"->"AFD-conexo-2"[label="b"];
+"AFD-conexo-1"->"AFD-conexo-3"[label="a"];
+"AFD-conexo-1"->"AFD-conexo-2"[label="b"];
+"AFD-conexo-2"->"AFD-conexo-1"[label="a"];
+"AFD-conexo-2"->"AFD-conexo-2"[label="b"];
+"AFD-conexo-3"->"AFD-conexo-3"[label="a"];
+"AFD-conexo-3"->"AFD-conexo-1"[label="b"];
+"AFD-conexo-1"[peripheries=2];
+"AFD-conexo-2"[peripheries=2];
+"AFD-conexo-3"[peripheries=2];
+"AFD-conexo-0"[label = "0"];"AFD-conexo-1"[label = "1"];"AFD-conexo-2"[label = "2"];"AFD-conexo-3"[label = "3"];node [style=invis]; "AFD-conexo-00";
+ "AFD-conexo-00"->"AFD-conexo-0";label = "AFD-conexo";}
+
+ }

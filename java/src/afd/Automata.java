@@ -23,7 +23,7 @@ public class Automata {
 		//estados
 		String[] tmp=parts[0].split(" ");
 		int i;
-	    for (i=1;i<tmp.length;i++){
+	    for (i=0;i<tmp.length;i++){
 	    	this.estados.add(tmp[i]);
 	    }
 	  //alfabeto
@@ -95,6 +95,32 @@ public class Automata {
 		}
 		return null;
 	}
+	public String generaDot(String prefix){
+		String conf="";
+	    String inicio="subgraph \""+prefix+"\" { \n";
+	    String  fin="label = \""+prefix+"\";}";
+	    Iterator <Transicion>i = this.transiciones.iterator();
+	    String cuerpo="";
+	    while (i.hasNext()){
+	    	Transicion t = i.next();
+	    	cuerpo+="\""+prefix+"-"+t.getInicio()+"\"->\""+prefix+"-"+t.getFin()+"\"[label=\""+t.getSimb()+"\"]"+";\n";
+	    }
+	    String finales="";
+	    Iterator <String>it= this.estadosFinales.iterator();
+	    while(it.hasNext()){
+	    	String e= it.next();
+	    	finales+="\""+prefix+"-"+e+"\"[peripheries=2];\n";
+	    }
+	    String inicial="node [style=invis]; \""+prefix+"-00\";\n \""+prefix+"-00\"->\""+prefix+"-"+this.estadoInicial+"\";";
+		it = this.estados.iterator();
+		String estadoslbl="";
+	    while(it.hasNext()){
+	    	String e= it.next();
+	    	estadoslbl+="\""+prefix+"-"+e+"\"[label = \""+e+"\"];";
+	    }
+	    conf=inicio+cuerpo+finales+estadoslbl+inicial+fin;
+	    return conf;
+	}
 	public void conexo(){
 		List <String> listaEstados=new ArrayList<String>();
 		listaEstados.add(this.estadoInicial);
@@ -117,6 +143,7 @@ public class Automata {
 				}
 			}
 		}
+		this.estados=visitados;
 		this.transiciones=nuevasTransiciones;	
 	}
 }
