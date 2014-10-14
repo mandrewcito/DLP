@@ -1,5 +1,0 @@
-digraph G{
-1[peripheries=2]
-1->2[Style=bold,label="a"];
-2->3[Style=bold,label="b"];
-}
