@@ -24,4 +24,3 @@ f.write("\n}")
 f.close()
 os.system("dot par-AFD.txt -Tpng -o AFD-conexo.png")
 os.system("eog AFD-conexo.png && rm par-AFD.txt && rm AFD-conf.txt && rm AFD-conexo-conf.txt")
-

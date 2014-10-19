@@ -13,6 +13,9 @@
 % Insertar porciones de código
 \usepackage{listings}
 
+% Comenzar párrafos con separación no indentación
+\usepackage{parskip}
+
 % Configuración para porciones de código
 \lstset{
 %	language=bash,
@@ -49,24 +52,21 @@ programación a partir de un caso práctico}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Descripción}
-
 En el presente documento se describen varias soluciones a un mismo problema,
 realizadas en diferentes lenguajes de programación. El problema consiste en
 eliminar los estados finales de un autómata. El autómata debe ser finito y
 determinista, abreviado AFD. Tras este proceso, se obtendrá una nueva versión
 del autómata inicial, el autómata conexo equivalente.  
 
+
 \subsection{Estructura}
-
-Para representar un AFD, $M = \{ Q, \Sigma, s, F, \Delta \} $, se ha empleado una 
-lista para cada uno de sus componentes, exceptuando al estado inicial $s$, que 
-consta de un sólo elemento.
-
-Tanto un estado como un símbolo, están contituídos por una cadena de caracteres.  
-Una transición contiene dos estados, inicial y final, y un símbolo.
+Para representar un AFD, $M = \{ Q, \Sigma, s, F, \Delta \} $, se ha empleado 
+una lista para cada uno de sus componentes, exceptuando al estado inicial $s$, 
+que consta de un sólo elemento. Tanto un estado como un símbolo, están 
+contituídos por una cadena de caracteres. Una transición contiene dos estados, 
+inicial y final, y un símbolo.
 
 \begin{lstlisting}
-
 Objeto Automata:
 	estados:Lista<String>
 	alfabeto:Lista<String>
@@ -78,20 +78,35 @@ Objeto Transicion:
 	estadoInicial:String
 	estadoFinal:String
 	simbolo:String
-
 \end{lstlisting}
+
+
+\subsection{Cargar configuración}
+Para cargar el autómata del fichero de configuración, se emplea el siguiente 
+algoritmo.
+\begin{lstlisting}
+funcion inicializarAutomata(fichero configuracion):
+	String linea = Primera linea(fichero configuracion)
+	String lineas[] = Dividir linea por ";"
+	estados = lineas[1];
+	alfabeto = lineas[2];
+	estadosFinales = lineas[3];
+	estadoInicial = lineas[4];
+	desde i = 5 hasta fin(lineas) hacer:
+		transiciones += nueva transicion lineas[i];
+\end{lstlisting}
+
 
 \subsection{Algoritmo}
 El algoritmo que calcula el autómata conexo equivalente, se muestra a 
 continuación en pseudocódigo.
-
 \begin{lstlisting}
+
 funcion conexo(afd:Automata):
 	listaEstados = Lista vacia
 	listaEstados.add(afd.estadoInicial)
 	nuevasTransiciones = Lista vacia
 	visitados = Lista vacia
-
 	while listaEstados != vacia:
 		elem = listaEstados[0]
 		visitados.add(elem)
@@ -101,31 +116,42 @@ funcion conexo(afd:Automata):
 				si ((trans.fin no esta en visitados) y
 				(trans.fin no esta en listaEstados):
 					listaEstados.add(trans.fin)
-					
-	afd.transiciones=nuevasTransiciones
+	afd.transiciones = nuevasTransiciones
 
 \end{lstlisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Lenguaje original (Python)}
-Como lenguaje original se ha elegido Python, por su sencillez ya que es muy
-similar al pseudocódigo. El autómata se ha representado como un objeto. De igual 
-modo, una transición es también un objeto.
 
 \subsection{Versión y Sistema Operativo}
 Python 2.7.6 y Ubuntu 14.04 de 64 bits.
 
+
 \subsection{Características generales del lenguaje}
-Se trata de un lenguaje de programación multiparadigma, ya que soporta 
-orientación a objetos, programación imperativa y, en menor medida, programación 
-funcional. Es un lenguaje interpretado, usa tipado dinámico y es 
-multiplataforma.
+
+\begin{itemize}
+\item Lenguaje de programación multiparadigma.
+\item Soporta orientación a objetos.
+\item Programación imperativa.
+\item Programación funcional (en menor medida).
+\item Lenguaje interpretado.
+\item Tipado dinámico.
+\item Multiplataforma.
+\item Conteo de referencias (para eliminar bloques no usados).
+\item Resolución dinámica de nombres.
+\item Las variables se definen de forma dinámica.
+\item Listas mutables (se puede cambiar su contenido en tiempo de ejecución).
+\item Tuplas inmutables.
+\item Listas y tuplas pueden contener elementos de diferentes tipos.
+\end{itemize}
+
 
 \subsection{Análisis detallado}
+
 \subsubsection{Ventajas}
 \begin{itemize}
-\item Fácil lectura (casi pseudocodigo).
+\item Fácil lectura (casi pseudocódigo).
 \item Listas iterables sin necesidad de iteradores.
 \item Depuración sencilla en consola de modo interactivo.
 \item Las listas pueden contener varios tipos de datos, hasta pueden contener 
@@ -133,78 +159,32 @@ tuplas.
 \item Muy alto nivel.
 \item La entrada salida es sencilla.
 \end{itemize}
+
 \subsubsection{Desventajas}
 \begin{itemize}
 \item No permite la gestión manual de la memoria.
 \end{itemize}
   
-\subsection{Justificaciones respecto a las decisiones de diseño e implementación}
-Diseñaremos el automata con dos objetos, el resto de lenguaje seran de mas bajo 
-nivel que python, tendremos que utilizar mas recursos
 
-\subsection{Pseudocódigo estructuras}
-\begin{lstlisting}
-Objeto Automata:
-	estados:Lista
-	afabeto:Lista
-	estadosFinales:Lista
-	estadoInicial:String
-	Transiciones:Lista<Transiciones>
+\subsection{Justificaciones respecto a las decisiones de diseño e 
+implementación}
+Se ha diseñado el automata en un objeto, ya que permite mantener una
+representación cercana a la que se plantea en pseudocódigo. Una transición es 
+otro objeto, de forma que se almacena una lista de transiciones.
 
-Objeto Transicion: 
-	inicial:String
-	final:String
-	simbolo:String
-
-funcion inicializarAutomata(fichero configuracion):
-	String linea = Primera linea (fichero configuracion)
-	String lineas[] = Dividir linea por ";"
-	estados=lineas[1]; alfabeto = lineas[2];
-	estadosFinales=Lineas[3];estadoInicial=Linea[4];
-	Desde i=5 hasta tamaño(linea) hacer :
-	Añadir a Transiciones(nueva transicion linea[i]);
-
-funcion conexo():
-	colaEstados=Lista vacia
-	colaEstados.añadir(estadoInicial)
-	nuevasTransiciones=Lista vacia
-	visitados=Lista vacia
-	mientras (tamaño(colaEstados)!=0):
-		elem=colaEstados.pop()
-		visitados.añadir(elem)
-		para trans in Transiciones:
-			si (trans.ini==elem):
-				nuevasTransiciones.añadir(trans)
-				si(trans.fin no esta en	visitados ni en colaEstados):
-					colaEstados.añadir(trans.fin)
-	Transiciones=nuevasTransiciones
-\end{lstlisting}
 
 \subsection{Características que no se pudieron aprovechar del lenguaje}
+No se ha usado la programación funcional, ni "list comprehension". Tampoco se 
+empleó recursión en el algoritmo, aunque sí sería posible, realizando 
+modificaciones. También se podrían haber utilizado conjuntos pero no todos los 
+demás los soportan, por lo que se optó una implementación con listas.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\section{Java}
-\subsection{Compilador versión y el sistema operativo empleado}
-   JAVA 8, Ubuntu 64b 14.04
-
-\subsection{Características generales del lenguaje}
-    Java es un lenguaje de programación de propósito general, concurrente, orientado a objetos y basado en clases que fue diseñado específicamente para tener tan pocas dependencias de implementación como fuera posible.
-    En Java el problema fugas de memoria se evita en gran medida gracias a la recolección de basura
-
-\subsection{Análisis detallado}
-    muy parecido al lenguaje original, con la diferencia de las listas, que necesitan un iterador para recorrerlas y no se pueden iterar
-    directamente como en python, además la entrada salida se tiene que manejar a mayores con excepciones y en general es un poco mas laborioso que
-    en python, en cuanto a la orientacion a objetos es igual. solo se han cambiado las listas de python por los arrayList de java
-\subsection{Justificaciones respecto a las decisiones de diseño e implementación}
-    diseñaremos el automata con dos objetos, con la modificacion de las listas que ahora son array list.
-\subsection{Características que no se pudieron aprovechar del lenguaje}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Lenguaje C}
+
 \subsection{Compilador versión y el sistema operativo empleado}
 Compilador:
 \begin{lstlisting}
@@ -215,6 +195,7 @@ Sistema operativo:
 Linux 3.16.4-1 x86_64 GNU/Linux
 \end{lstlisting}
 
+
 \subsection{Características generales del lenguaje}
 Es un lenguaje imperativo procedural y funcional. Se considera de medio nivel,
 aunque incluye operaciones de bajo nivel, directamente escritas en ensamblador.
@@ -222,7 +203,10 @@ aunque incluye operaciones de bajo nivel, directamente escritas en ensamblador.
 Emplea un tipado fuertemente estático que impide realizar operaciones sin
 sentido. Sin embargo no tiene programación orientada a objetos, ni recolección
 de basura.
+
+
 \subsection{Análisis detallado}
+
 \subsubsection{Ventajas}
 \begin{itemize}
 \item Incluye un preprocesador muy útil para crear macros.
@@ -240,7 +224,9 @@ de basura.
 \item No tiene protección de memoria para accesos inválidos.
 \end{itemize}
 
-\subsection{Justificaciones respecto a las decisiones de diseño e implementación}
+
+\subsection{Justificaciones respecto a las decisiones de diseño e 
+implementación}
 Para la implementación en C, se ha seguido la aproximación inicial, empleando
 listas doblemente enlazadas. El autómata es una estructura, que contiene las
 listas.
@@ -255,6 +241,7 @@ clasificados, facilitando su uso y comprensión.
 La entrada y salida de la configuración del autómata se ha realizado usando la
 entrada y salida estándar. Para ello se usan funciones como fgets y printf.
 
+
 \subsection{Características que no se pudieron aprovechar del lenguaje}
 La recursión, ya que la implementación original no la requería. Se podría haber
 empleado, modificando el algoritmo, para incluirla, pero requeriría mantener una
@@ -264,6 +251,7 @@ sería muy similar.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Lenguaje ensamblador (NASM)}
+
 \subsection{Compilador versión y el sistema operativo empleado}
 Compilador:
 \begin{lstlisting}
@@ -275,12 +263,15 @@ Sistema operativo:
 Linux 3.16.4-1 x86_64 GNU/Linux
 \end{lstlisting}
 
+
 \subsection{Características generales del lenguaje}
-Ensamblador en una abstracción de las instrucciones de procesador, para que
+Ensamblador es una abstracción de las instrucciones de procesador, para que
 resulten más memorizables. Además el compilador elegido, NASM, contiene
 etiquetas, que evitan manejar directamente las posiciones de memoria.
 
+
 \subsection{Análisis detallado}
+
 \subsubsection{Ventajas}
 \begin{itemize}
 \item Permite construir código optimizado para una máquina específica.
@@ -313,5 +304,54 @@ que resultaría, realizar todo el programa en ensamblador.
 El algoritmo es una traducción del programa en C a ensamblador. Cada línea es 
 codificada con algunas instrucciones. Los bucles se forman con saltos y 
 etiquetas.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+\section{Java}
+
+\subsection{Compilador versión y el sistema operativo empleado}
+JAVA 8, Ubuntu 14.04 de 64 bits.
+
+
+\subsection{Características generales del lenguaje}
+\begin{itemize}
+\item Lenguaje de programación de propósito general
+\item Concurrente.
+\item Orientado a objetos.
+\item Recolector de basura (para evitar fugas de memoria).
+\item Variables: no se definen de forma dinámica (se especifica el tipo antes de 
+usarla).
+\item Diseñado para ofrecer seguridad y portabilidad, y no ofrece acceso directo 
+al hardware de la arquitectura ni al espacio de direcciones.
+\item Recolector de basura puede suponer una carga para el sistema (sistemas en 
+tiempo real).
+\item No dispone de operadores de sobrecarga definidos por el usuario.
+\item No es un lenguaje absolutamente orientado a objetos, no todos los valores 
+son objetos.
+\end{itemize}
+
+
+\subsection{Análisis detallado}
+Muy parecido al lenguaje original, con la diferencia de las listas, que 
+necesitan un iterador para recorrerlas y no se pueden iterar directamente como 
+en Python. Además la entrada y salida se debe manejar con excepciones y en 
+general es un poco más laborioso que en Python. En cuanto a la orientacion a 
+objetos es igual. Sólo se han cambiado las listas de Python por los arrayList de 
+Java.
+
+
+\subsection{Justificaciones respecto a las decisiones de diseño e 
+implementación}
+El autómata mantiene la misma estructura que en Python, modificando las listas 
+por arrayList. El código Java puede ser a veces redundante en comparación con 
+otros lenguajes.
+
+Podrían haberse empleado conjuntos, igual que en Python, pero se ha decidido 
+prescindir de ellos, en beneficio de otras implementaciones más sencillas con 
+listas.
+
+
+\subsection{Características que no se pudieron aprovechar del lenguaje}
+Casi ninguna de las multiples librerías ya que no eran necesarias.
 
 \end{document}
