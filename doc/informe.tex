@@ -173,6 +173,25 @@ Python 2.7.6, Ubuntu 64b 14.04
     Diseñaremos el automata con dos objetos, con la modificacion de las listas que ahora son array list.Con la salvedad de que el código Java puede ser a veces redundante en comparación con otros lenguajes
     \subsection{Características que no se pudieron aprovechar del lenguaje}
     Casi ninguna de las multiples librerías ya que no eran necesarias
+     \section{Haskell}
+       \subsection{Compilador versión y el sistema operativo empleado}
+       The Glorious Glasgow Haskell Compilation System, version 7.6.3
+       Ubuntu 14 64b
+       \subsection{Características generales del lenguaje}
+       	No ejecuta funciones ni realiza cálculos hasta que se ve forzado a hacerlo
+        Tipado estático(captura más errores antes de la ejecución)
+        Sistema de tipos con inferencia de tipos(permite código más general).
+        Paragidma funcional
+        Modo interactivo (práctico para debug)
+        Módulos:colección de funciones, tipos y clases de tipos relacionadas entre sí.
+        Haskell no proporciona el estilo de sobrecarga.
+       \subsection{Análisis detallado}
+        Como en haskell no tenemos objetos, se han creado tipos data(uno para las transiciones y otro para el autómata), también tendremos metodos asociados a eses tipos pero en haskell se separa la definición de los métodos del tipo.
+        
+       \subsection{Justificaciones respecto a las decisiones de diseño e implementación}
+       Lo más intuitivo para substituir los objetos eran los tipos data, en el caso del algoritmo se ha cambiado un poco más el funcionamiento para poder ajustarlo a la programación funcional y evitar utilizar haskell como un lenguaje de programación imperativa normal
+       \subsection{Características que no se pudieron aprovechar del lenguaje}
+       Una de las "mejores del lenguaje" los texas rangos(por la naturaleza del problema no eran de utilidad) : ['a'..'z'], cycle,repeat (...) Listas intensionales [x*2 | x <- [1..10]], zip de las listas,“pattern matching” de las funciones antes de implementarlas
       \section{C}
        \subsection{Compilador versión y el sistema operativo empleado}
         \subsection{Características generales del lenguaje}
