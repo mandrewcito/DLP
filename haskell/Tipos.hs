@@ -8,6 +8,6 @@ module Tipos where
 	data Automata = Automata {estados :: [String], alfabeto :: [String], inicial :: String, finales :: [String], transiciones ::[Transicion]} deriving (Eq, Show, Read)
 	getEstados(Automata estados _ _ _ _)=estados
 	getAlfabeto(Automata _ alfabeto _ _ _)=alfabeto
-	getInicial(Automata _ _ inicial _ _)=inicial
+	getInicial(Automata _ _ inicial _ _)=[inicial] -- en haskell string es un alias de [char]
 	getFinales(Automata _ _ _ finales _)=finales
 	getTransiciones(Automata _ _ _ _ transiciones)=transiciones
