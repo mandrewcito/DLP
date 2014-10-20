@@ -43,7 +43,7 @@ initAutomata config= do
 --obtiene transiciones conexas dado un SI y unas transciones
 trans_conexas cola visitados transiciones conexas = do
 	case cola of
-		[]-> conexas
+		[]->(conexas,visitados)
 		x:xs->trans_conexas (getNConexas x transiciones (visitados++[x]) xs) (visitados++[x]) transiciones (conexas++(getTConexas x transiciones []))
 --obtiene nodos conexos
 getNConexas e transiciones visitados cola = do
@@ -52,7 +52,7 @@ getNConexas e transiciones visitados cola = do
 		(x:xs)->if (getInicio x == e) && not (elem (getFin x) visitados)&& not (elem (getFin x) cola)
 			then getNConexas e xs visitados (cola++[getFin x])
 			else getNConexas e xs visitados cola
---obtiene transiciones conexas
+--obtiene transiciones conexas y estados 
 getTConexas e transiciones tnew = do 
 	case transiciones of
 		([])->tnew
@@ -73,12 +73,14 @@ main = do
 				hClose inh
 				let cnf = confAutomata
 				automata<-(initAutomata cnf)			
-				print "creado automata, hacemos el conexo"
-				print (length( getTransiciones automata))
-                                let transC= trans_conexas (getInicial automata) [] (getTransiciones automata) [] 
+				print (getEstados automata)
+				print (getAlfabeto automata)
+				print (getInicial automata)
+				print (getFinales automata)
+				print (getTransiciones automata)
+                                let (transC,visitados)= trans_conexas (getInicial automata) [] (getTransiciones automata) []
 				print transC
-				print  (length transC)
-				print "creado automata conexo"
+				print visitados
 			else putStrLn "el fichero no existe"
 		_ -> putStrLn "use: stripper <file>"
 
