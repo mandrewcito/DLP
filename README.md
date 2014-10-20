@@ -8,5 +8,6 @@ C -> $make test , si se quiere cambiar el fichero de configuracion editar Makefi
 
 ensamblador ->$make test,si se quiere cambiar el fichero de configuracion editar Makefile(usa firefox para visualizar automata)
 
-haskell -> $runghc leer_args.hs "fichero configuracion">config.txt  && python crea_grafo.py 
+haskell -> $runghc leer_args.hs "fichero configuracion">config.txt  && python crea_grafo.py (usa eog para visualizar el automata)
+
 
