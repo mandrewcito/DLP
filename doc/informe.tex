@@ -173,7 +173,7 @@ tuplas.
   
 \subsection{Justificaciones respecto a las decisiones de diseño e 
 implementación}
-Se ha diseñado el automata en un objeto, ya que permite mantener una
+Se ha diseñado el autómata en un objeto, ya que permite mantener una
 representación cercana a la que se plantea en pseudocódigo. Una transición es 
 otro objeto, de forma que se almacena una lista de transiciones.
 
@@ -341,9 +341,8 @@ etiquetas.
     
     \subsection{Análisis detallado}
     
-    muy parecido al lenguaje original, con la diferencia de las listas, que necesitan un iterador para recorrerlas y no se pueden iterar
-    directamente como en python, además la entrada salida se tiene que manejar a mayores con excepciones y en general es un poco mas laborioso que
-    en python, en cuanto a la orientacion a objetos es igual. solo se han cambiado las listas de python por los arrayList de java
+    Muy parecido al lenguaje original, con la diferencia de las listas, que necesitan un iterador para recorrerlas y no se pueden iterar directamente como en python(que hasta los string son iterables), además para manejar la entrada salida, a mayores añadimos excepciones y en general es un poco mas laborioso que
+    en python, en cuanto a la orientación a objetos es igual. Sólo se han cambiado las listas de python por los arrayList de java.
     \subsection{Justificaciones respecto a las decisiones de diseño e implementación}
 El autómata mantiene la misma estructura que en Python, modificando las listas 
 por arrayList. El código Java puede ser a veces redundante en comparación con 
@@ -353,13 +352,14 @@ Podrían haberse empleado conjuntos, igual que en Python, pero se ha decidido
 prescindir de ellos, en beneficio de otras implementaciones más sencillas con 
 listas.
     \subsection{Características que no se pudieron aprovechar del lenguaje}
-    Casi ninguna de las multiples librerías ya que no eran necesarias
+    Casi ninguna de las multiples librerías ya que no eran necesarias, al igual que tampoco era necesaria la sobreescritura de métodos como el equals.
      \section{Haskell}
        \subsection{Compilador versión y el sistema operativo empleado}
        Compilador :
        \begin{lstlisting}
        The Glorious Glasgow Haskell Compilation System, version 7.6.3
        \end{lstlisting}
+       Sistema Operativo:
        \begin{lstlisting}
        Linux 3.13.0-37-generic #64-Ubuntu
        \end{lstlisting}
@@ -374,16 +374,11 @@ listas.
         \item Haskell no proporciona el estilo de sobrecarga.
        \end{itemize}
        \subsection{Análisis detallado}
-        Como en haskell no tenemos objetos, se han creado tipos data(uno para las transiciones y otro para el autómata), también tendremos metodos asociados a eses tipos pero en haskell se separa la definición de los métodos del tipo.
+        Como en haskell no tenemos objetos, se han creado tipos data(uno para las transiciones y otro para el autómata), también tendremos métodos asociados a eses tipos pero en haskell se separa la definición de los métodos del tipo.
         
        \subsection{Justificaciones respecto a las decisiones de diseño e implementación}
        Lo más intuitivo para substituir los objetos eran los tipos data, en el caso del algoritmo se ha cambiado un poco más el funcionamiento para poder ajustarlo a la programación funcional y evitar utilizar haskell como un lenguaje de programación imperativa normal
        \subsection{Características que no se pudieron aprovechar del lenguaje}
        Una de las "mejores del lenguaje" los texas rangos(por la naturaleza del problema no eran de utilidad) : ['a'..'z'], cycle,repeat (...) Listas intensionales [x*2 | x <- [1..10]], zip de las listas,“pattern matching” de las funciones antes de implementarlas
-
-
-
-\subsection{Características que no se pudieron aprovechar del lenguaje}
-Casi ninguna de las multiples librerías ya que no eran necesarias.
-
+       
 \end{document}
