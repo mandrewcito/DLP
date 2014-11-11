@@ -7,12 +7,19 @@
 % Usar codificación utf-8 para acentos y otros.
 \usepackage[utf8]{inputenc}
 
+\usepackage{fullpage}
 
 % Insertar porciones de código
 \usepackage{listings}
 
 % Comenzar párrafos con separación no indentación
 \usepackage{parskip}
+
+% Usar gráficos
+\usepackage{graphicx}
+
+% Carpeta de las imágenes
+\graphicspath{{img/}}
 
 % Configuración para porciones de código
 \lstset{
@@ -47,61 +54,89 @@
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Lego Mindstorms EV3}
+
 \subsection{Introducción}
-   Mindstorms EV3 es un lenguaje de programación creado para los para interactuar con el kit Mindstorms EV3 de Lego. Esta diseñado para que Robots modulares que se construyen con piezas de lego por lo que son de coste "reducido".Estos robots utilizan piezas de la linea Technic con sensores y actuadores de bajo coste, con un módulo de control (brick) que tiene la potencia de un smartphone de gama baja.
-  \subsection{Características del brick}
-  \begin{itemize}
-  \item Procesador ARM9 @300MHz.
-  \item 16 MB Flash (Linux).
-  \item 64 MB RAM.
-  \item 4 puertos de entrada para sensores y 4 puertos de salida para actuadores.
-  \item Ranura microSDHC (hasta 32 GB). Se puede arrancar un S.O. diferente al que trae de
-  serie desde una tarjeta en esta ranura.
-  \item Bluetooth.
-  \item Soporta wifi (sin encriptación o con WPA2) conectando dongle NetGear WNA1100 en
-  puerto USB.
-  \item Se pueden conectar hasta 4 bricks en daisy chaining para ampliar el número de puertos
-  para sensores y actuadores (el programa se ejecuta solo en uno de los bricks).
-  \end{itemize}
-  \subsection{Sofware de Programación}
-  \subsubsection{De ejecución del brick}
-    \begin{itemize}
-    \item Mindstorms EV3(el que trataremos).
-    \item RobotC for LEGO Mindstorms.
-    \item MonoBrick(Alfa).
-    \item LabVIEW(En desarrollo).
-    \item BricxCC(En desarrollo).
-    \item Python EV3(En desarrollo).
-    \item LeJOS(Beta).
-    \end{itemize}
-  \subsubsection{De control remoto}
-      \begin{itemize}
-      \item Microsoft EV3 API.
-      \item MonoBrick.
-      \item RWTH Toolbox para Matlab(En desarrollo).
-      \end{itemize}
+Mindstorms EV3 es un lenguaje de programación creado para interactuar con el kit 
+Mindstorms EV3 de Lego. Esta diseñado para robots modulares que se construyen 
+con piezas de Lego, por lo que son de coste "reducido". Estos robots utilizan 
+piezas de la linea Technic con sensores y actuadores de bajo coste, con un 
+módulo de control (brick) que tiene la potencia de un smartphone de gama baja.
+
+\subsection{Características del brick}
+
+\begin{itemize}
+\item Procesador ARM9 @300MHz.
+\item 16 MB Flash (Linux).
+\item 64 MB RAM.
+\item 4 puertos de entrada para sensores y 4 puertos de salida para actuadores.
+\item Ranura microSDHC (hasta 32 GB). Se puede arrancar un S.O. diferente al que
+trae de serie desde una tarjeta en esta ranura.
+\item Bluetooth.
+\item Soporta wifi (sin encriptación o con WPA2) conectando dongle NetGear
+WNA1100 en puerto USB.
+\item Se pueden conectar hasta 4 bricks en daisy chaining para ampliar el número
+de puertos para sensores y actuadores (el programa se ejecuta solo en uno de los
+bricks).
+\end{itemize}
+\subsection{Sofware de Programación}
+\subsubsection{De ejecución del brick}
+\begin{itemize}
+\item Mindstorms EV3(el que trataremos).
+\item RobotC for LEGO Mindstorms.
+\item MonoBrick(Alfa).
+\item LabVIEW(En desarrollo).
+\item BricxCC(En desarrollo).
+\item Python EV3(En desarrollo).
+\item LeJOS(Beta).
+\end{itemize}
+\subsubsection{De control remoto}
+\begin{itemize}
+\item Microsoft EV3 API.
+\item MonoBrick.
+\item RWTH Toolbox para Matlab(En desarrollo).
+\end{itemize}
 \section{Mindstorms EV3}
 \subsection{Características}
 \subsubsection{Pros}
-      \begin{itemize}
-      \item Muy fácil construir comportamientos reactivos / programar autómatas.
-      \item Curva de aprendizaje muy rápida para quien no haya programado antes en otro lenguaje.
-      \item Fomenta la documentación de los programas.
-      \item Ejecución paralela trivial.
-      \item Herramienta de data logging muy sencilla de utilizar.
-      \item Muy buena documentación disponible en su propio servidor web (http://localhost:58401).
-      \end{itemize}
+\begin{itemize}
+\item Muy fácil construir comportamientos reactivos / programar autómatas.
+\item Curva de aprendizaje muy rápida para quien no haya programado antes en
+otro lenguaje.
+\item Fomenta la documentación de los programas.
+\item Ejecución paralela trivial.
+\item Herramienta de data logging muy sencilla de utilizar.
+\item Muy buena documentación disponible en su propio servidor web
+(http://localhost:58401).
+\end{itemize}
 \subsubsection{Contras}
-      \begin{itemize}
-      \item Tedioso manejar estructuras de datos complejas.
-      \item La programación es lenta si se compara con un lenguaje tradicional una vez que se domina éste.
-      \item Programas medianos o grandes complicados de gestionar. Es necesario acostumbrarse a particionar todo en
-      bloques propios.
-      \item No hay simulador (aunque se puede acoplar al Robot Virtual Worlds).
-      \end{itemize}
+\begin{itemize}
+\item Tedioso manejar estructuras de datos complejas.
+\item La programación es lenta si se compara con un lenguaje tradicional una vez
+que se domina éste.
+\item Programas medianos o grandes complicados de gestionar. Es necesario
+acostumbrarse a particionar todo en
+bloques propios.
+\item No hay simulador (aunque se puede acoplar al Robot Virtual Worlds).
+\end{itemize}
 \subsection{El entorno de programación}
 \subsubsection{Ventana}
+
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{img-083}
+	\centering
+\end{figure}
+
+\begin{enumerate}
+\item Area de diseño del programa.
+\item Sección de bloques disponibles.
+\item Comunicación con el hardware.
+% FIXME Que demonios es el 4?
+\item Editor de contenidos.
+\item Barra de herramientas.
+\end{enumerate}
+
 \subsubsection{Proyecto}
 \subsubsection{Página de hardware}
 \section{Lenguaje de Programación}
