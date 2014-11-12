@@ -105,21 +105,74 @@
 \subsubsection{Ventana}
 \includegraphics[scale=0.45]{Programa.PNG}
 \subsubsection{Proyecto}
+Como en la mayoría de IDES los archivos se organizan en proyectos, que pueden contener programas experimentos imágenes y archivos de sonido. Los experimentos son programas que crea automáticamente el IDE  para capturar datos.
 \includegraphics[scale=0.5]{image28.jpg}
 \subsubsection{Página de hardware}
+Aquí muestra la información sobre el bloque EV3 que está conectado,versión de firmware, tipo de conexión(entre el pc y el bloque), configuración inalámbrica, barra de memoria ...
+También están las opciones de descargar programa al brick, descargar y ejecutar o ejecutar seleccionados.
+\includegraphics[scale=0.5]{controEV3.PNG}
 \section{Lenguaje de Programación}
 \subsection{Introducción}
+Los programas se crean arrastrando bloques(que tienen diferentes comportamientos como variables control de flujo, sensores o actuadores)que representan los elementos básicos del lenguaje.Todo programa empieza por el bloque iniciar y su ejecución va de izquierda a derecha.Algunos bloques tienen una ejecución no bloqueante es decir, su acción persiste mientras otro bloque posterior no la finalice explícitamente.La ejecución finaliza cuando se llega al extremo derecho y no hay mas bloques o  explícitamente con el bloque finalizar.
 \subsection{Secuencias de Bloques}
+Cuando los bloques están juntos o unidos por un cable forman una secuencia de bloques.
+\includegraphics[scale=0.5]{image38.jpg}
 \subsection{Secuencias Paralelas}
+Cuando los bloques están en paralelo, ya sea por el bloque iniciar o a partir de un bloque en concreto su ejecución es igual que en secuencia pero eso  si, todas las secuencias comparten las variables y en caso de conflicto su  comportamiento es impredecible ya que solo está garantizada la ejecución atómica de cada bloque individualmente.
+\includegraphics[scale=0.5]{image39.jpg}
 \subsection{Creación de bloques}
+Este lenguaje fomenta la aplicación de "funciones" que sería lo análogo a la creación de un bloque propio para agrupar secuencias de bloques con un comportamiento concreto. Para ello se emplea el Constructor de Mi Bloque en el que se definen : Nombre, icono, Tipo de dato y  valor por defecto para sus respectivas entradas y salidas.
+\includegraphics[scale=0.5]{ConstructorBloques.PNG} 
+Una vez creados, estos bloques se pueden cambiar pero no se pueden editar ni sus entradas ni sus salidas.
 \subsection{Tipos de datos}
-\subsection{Cables de datos}
+\begin{itemize}
+\item Numérico
+\item Lógico
+\item Texto
+\item Secuencia numérica
+\item Secuencia lógica
+\end{itemize}
+El texto puede ser unicode pero la pantalla del brick solo representa los caracteres ASCII de 7 bits
+Las secuencias son arrays unidimensionales (no existe otro tipo)
 \subsection{Variables y constantes}
+El lenguaje soporta los conceptos tradicionales pero son tediosas de usar.
 \subsubsection{Variables}
+Se usan si un dato va a ser accedido y actualizado en diferentes putos del programa o si se necesita un dato en diferentes secuencias (ya que se comparten)
 \subsubsection{Constantes}
+Se usan si un dato solo va a ser accedido.
+\subsection{Cables de datos}
+Este lenguaje trata de evitar uso de variables, los cables de datos con conexiones entre los bloques para pasar los resultados de otros bloques, es decir son un paso por valor entre bloques. El bloque origen debe estar antes que el bloque de destino en la secuencia y el bloque destino no se ejecuta hasta que el dato está disponible por lo que es posible usar cables de datos para sincronizar secuencias paralelas. Estos cables pueden pasar todos los tipos de datos, y se puede ver su contenido durante la ejecución de un programa.
 \subsection{Bloques predefinidos}
+\subsubsection{Bloques de acción}
+\includegraphics[scale=0.5]{acciones.PNG}
+Bloques de los motores(mediano y grande), mover la dirección, mover en tanque, pantalla , sonido y luz de estado EV3.
+\subsubsection{Bloques de control de flujo}
+\begin{itemize}
+\item iniciar.
+\item condicional.
+\includegraphics[scale=0.5]{condicional.PNG}
+\item bucle y finalizar bucle.
+\includegraphics[scale=0.5]{bucle.PNG}
+\item sleep.
+\includegraphics[scale=0.5]{sleep.PNG}
+\end{itemize}
+\subsubsection{Bloques de sensores}
+\includegraphics[scale=0.5]{sensores.PNG}
+Botones del brick, sensor de color, girosensor, sensor infrarrojo, rotación del motor, sensor de temperatura, temporizador, sensor táctil, sensor ultrasónico, medidor de energía y sensor de sonido NXT.
+\subsubsection{Bloques de datos}
+\includegraphics[scale=0.5]{operaciones.PNG}
+Variable, constante, operaciones secuenciales, operaciones lógicas, matemática, redondear, comparar, alcance, texto y aleatorio.
+\subsubsection{Bloques de Avanzados}
+\includegraphics[scale=0.5]{avanzado.PNG}
+Acceso a archivo, registro de datos, mandar mensaje, conexión bluetooth,mantener archivo, valor del sensor sin procesar, motor sin regular, invertir el motor, detener el programa.
+\subsubsection{Mis bloques}
+\includegraphics[scale=0.5]{BloquesPersonalizados.PNG}
+Aquí estarán los bloques creados.
 \subsection{Flujo de un programa}
 \subsubsection{Iniciar}
+Marca el inicio de una secuencia de bloques ya que puede haber más de una secuencia.Todas las secuencias se inician automáticamente cuando se inicia el programa y se ejecutan al mismo tiempo.
 \subsubsection{detener}
+Finaliza una secuencia de bloques aunque su uso no es obligatorio.Finaliza todas las secuencias en ejecución.
 \subsection{E/S básica}
+
 \end{document}
