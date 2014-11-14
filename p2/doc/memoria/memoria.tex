@@ -492,7 +492,7 @@ Modos de funcionamiento:
   \centering
   \begin{subfigure}{.7\textwidth}
 	\caption{Bloque motor Grande}
-	\includegraphics{image61.jpg}
+	\includegraphics[scale=0.5]{image61.jpg}
 	\label{fig:sub1}
   \end{subfigure} %
   \end{minipage}
@@ -500,21 +500,135 @@ Modos de funcionamiento:
   \begin{minipage}{0.45\linewidth}
   \begin{subfigure}{.7\textwidth}
 	\caption{Bloque motor mediano}
-	\includegraphics{image62.jpg}
+	\includegraphics[scale=0.5]{image62.jpg}
 	\label{fig:sub2}
   \end{subfigure}
 \end{minipage}
   \caption{Motores mediano y grande}
 \end{figure}
 \subsubsection{Sensor de ultrasonidos}
+Envía ondas de sonido de alta frecuencia y mide cuánto tarda el sonido en reflejarse de vuelta al sensor con un rango de detección de 3 a 250cm.
+Modos de funcionamiento :
+\begin{itemize}
+\item Distancia (al objeto más cercano)
+\item presencia (detecta señales de ultrasonidos de otras fuentes)
+\item Para los anteriores modo existe un modo comparación con un valor especificado
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque sensor ultrasonidos}
+	\includegraphics[scale=0.75]{image64.jpg}
+	\centering
+\end{figure}
 \subsubsection{Sensor de infrarrojos}
+Envía luz en el espectro de los infrarrojos y detecta el reflejo de esta luz en otros objetos(hasta 70cm). 
+Modos de funcionamiento :
+\begin{itemize}
+\item Proximidad
+\item Baliza(remoto)
+\item Baliza(posición)
+\item Para cada modo anterior existe un modo comparación respecto a un valor
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque sensor de infrarrojos}
+	\includegraphics[scale=0.75]{image68.jpg}
+	\centering
+\end{figure}
 \subsubsection{Sensor giroscopio}
+Detecta el movimiento de rotación en un plano(máximo 400º/seg)
+Modos de funcionamiento :
+\begin{itemize}
+\item Angulo
+\item Velocidad de rotación
+\item Modo comparación y a mayores un reinicio para poner la referencia a 0º
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque giroscopio}
+	\includegraphics[scale=0.75]{image70.jpg}
+	\centering
+\end{figure}
 \subsubsection{Sensor de color}
+Detecta color o intensidad de luz.
+Modos de funcionamiento :
+\begin{itemize}
+\item color (entre 7 colores : negro, azul, verde, amarillo, rojo, blanco, marrón y sin color)
+\item intensidad de luz reflejada
+\item intensidad de luz ambiente
+\item Modo comparación para todos estos métodos.
+\item Calibrar mínimo(intensidad de luz a 0)
+\item Calibrar máximo(intensidad de luz a 100)
+\item Reinicio
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque sensor de color}
+	\includegraphics[scale=0.75]{image71.jpg}
+	\centering
+\end{figure}
 \subsubsection{Sensor de rotación del motor}
+Obtiene información de un motor de lo que esta girando o de la potencia aplicada.
+Modos de funcionamiento :
+\begin{itemize}
+\item Rotación
+\item Potencia
+\item Modo comparación para estos dos últimos
+\item Reinicio
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque sensor rotación del motor}
+	\includegraphics[scale=0.75]{image74.jpg}
+	\centering
+\end{figure}
 \subsubsection{Sensor de contacto}
+Modos de funcionamiento :
+\begin{itemize}
+\item Estado (si está pulsado o no)
+\item Modo de comparación para el anterior modo
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque sensor de contacto}
+	\includegraphics[scale=0.75]{image77.jpg}
+	\centering
+\end{figure}
 \subsubsection{Sensor de temperatura}
+Mide la temperatura en la punta de su sonda
+metálica. El sensor mide en grados Celsius (de
+-20C a 120C) y Fahrenheit (de -4F a 248F)
+con una exactitud de 0,1C.
+Modos de funcionamiento :
+\begin{itemize}
+\item Temperatura
+\item Para el modo anterior existe un modo comparación con un valor.
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque sensor de temperatura}
+	\includegraphics[scale=0.75]{image79.jpg}
+	\centering
+\end{figure}
 \subsubsection{Temporizador}
+Obtiene tiempo de alguno de los temporizadores del brick(que son 8)
+Modos de funcionamiento :
+\begin{itemize}
+\item Tiempo
+\item Modo comparación para el tiempo
+\item Reinicio
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque temporizador}
+	\includegraphics[scale=0.75]{image81.jpg}
+	\centering
+\end{figure}
 \subsubsection{Espera}
+Modo que espera a que suceda algo antse de continuar con el siguiente bloque de secuencia
+Modos de funcionamiento :
+\begin{itemize}
+\item Tiempo
+\item Sensor
+\item Mensaje(por un mensaje bluetooth de tipo especificado)
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque espera}
+	\includegraphics[scale=0.75]{image82.jpg}
+	\centering
+\end{figure}
 \subsection{Control de flujo}
 \subsubsection{Condicionales}
 \subsubsection{Bucles}
