@@ -493,16 +493,15 @@ Modos de funcionamiento:
 \begin{figure}[H]
     \caption{Motores mediano y grande}
     \centering
-
   \begin{subfigure}{0.45\linewidth}
+    \centering
 	\caption{Bloque motor Grande}
 	\includegraphics[scale=0.5]{image61.jpg}
-	\label{fig:sub1}
   \end{subfigure} %
   \begin{subfigure}{0.45\linewidth}
+    \centering
 	\caption{Bloque motor mediano}
 	\includegraphics[scale=0.5]{image62.jpg}
-	\label{fig:sub2}
   \end{subfigure}
 \end{figure}
 
@@ -591,8 +590,8 @@ Modos de funcionamiento :
 \subsubsection{Sensor de temperatura}
 Mide la temperatura en la punta de su sonda
 metálica. El sensor mide en grados Celsius (de
--20C a 120C) y Fahrenheit (de -4F a 248F)
-con una exactitud de 0,1C.
+-20ºC a 120ºC) y Fahrenheit (de -4ºF a 248ºF)
+con una exactitud de 0,1ºC.
 Modos de funcionamiento :
 \begin{itemize}
 \item Temperatura
@@ -631,6 +630,24 @@ Modos de funcionamiento :
 \end{figure}
 \subsection{Control de flujo}
 \subsubsection{Condicionales}
+Bloque interruptor, contiene dos o mas secuencias de bloques de programación(casos). Estos casos se pueden mostrar en pestañas y puede existir un caso por defecto, puede actuar como if.. else o un switch.Modos de funcionamiento:
+\begin{itemize}
+\item Sensor(comprobar si el valor de un sensor cumple o no una condición)
+\item Lógico (True o False para una sentencia determinada)
+\item Texto(compara texto)
+\item Numérico(compara número)
+\end{itemize}
 \subsubsection{Bucles}
+Repite una secuencia de bloques contenida en su interior.
+Modos de funcionamiento:
+\begin{itemize}
+\item Ilimitado (While True)
+\item Cuenta (repite número limitado de veces)
+\item Tiempo (durante un tiempo especificado)
+\item Lógico(hasta que una entrada logica se cumpla)
+\item Sensor (Hasta que un sensor tenga un valor determinado)
+\item Mensaje (Hasta que se recibe un mensaje determinado)
+\end{itemize}
 \subsubsection{Break}
+Interrupción de un bucle, provoca la finalización de un bucle de manera anticipada. Se puede especificar que bucle quiere interrumpirse por medio de su etiqueta y desde cualquier parte del código(Muy útil para secuencias en paralelo)
 \end{document}
