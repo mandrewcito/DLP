@@ -18,7 +18,9 @@
 
 % Usar gráficos
 \usepackage{graphicx}
-
+\usepackage{caption}
+\usepackage{subcaption}
+%
 % Usar contenedores flotantes para figuras.
 \usepackage{float}
 
@@ -44,9 +46,6 @@
 	extendedchars=false,
 	inputencoding=utf8
 }
-% % path imagenes
-\usepackage{graphicx}
-\graphicspath{ {img/} }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Propiedades
@@ -147,7 +146,7 @@ programa, empleando bloques. Se muestra en la figura \ref{fig:principal}.
 
 \begin{figure}[H]
 	\caption{Ventana principal.\label{fig:principal}}
-	\includegraphics[width=\linewidth]{img-083}
+	\includegraphics[width=\linewidth]{Programa.PNG}
 	\centering
 \end{figure}
 
@@ -372,5 +371,152 @@ Finaliza una secuencia de bloques aunque su uso no es obligatorio.Finaliza todas
 las secuencias en ejecución.
 
 \subsection{E/S básica}
-
+\subsubsection{Pantalla}
+Muestra texto o gráficos.Modos de funcionamiento:
+\begin{itemize}
+\item Texto
+\item Formas
+\item Imagen
+\item Reiniciar
+\end{itemize}
+Ejemplo de uso :
+\begin{itemize}
+\item Iniciar.
+\item Escribir en pantalla - Borrar pantalla.
+\item Esperar 2 segundos.
+\item Escribir texto y no borrar la pantalla.
+\item Esperar 2 segundos.
+\end{itemize}
+\begin{figure}[H]
+	\caption{Secuencia de ejemplo de uso pantalla}
+	\includegraphics[scale=0.75]{image49.jpg}
+	\centering
+\end{figure}
+\subsubsection{Luz de estado}
+Controla la luz de estado del brick puede ser un pulso continuo o con pulsos.
+\begin{itemize}
+\item Encendido
+\item Apagar
+\item Reiniciar
+\end{itemize}
+Ejemplo de uso :
+\begin{itemize}
+\item iniciar
+\item esperar
+\item luz de estado roja sin pulso
+\item esperar
+\item luz de estado naranja con pulso
+\item esperar
+\end{itemize}
+\begin{figure}[H]
+	\caption{Secuencia de ejemplo de uso luz estado }
+	\includegraphics[scale=0.75]{image49.jpg}
+	\centering
+\end{figure}
+\subsubsection{Sonido}
+Reproduce sonido en el altavoz del brick, se puede ajustar el volumen y reproducir en bucle.Esta reproducción puede ser bloqueante o no bloqueante.
+Modos de funcionamiento :
+\begin{itemize}
+\item Archivo
+\item Tono
+\item Nota
+\item Detener
+\end{itemize}
+Ejemplo de uso:
+\begin{itemize}
+\item Iniciar
+\item Sonido (archivo)
+\item Sonido (tono)
+\item Sonido (nota)
+\item Esperar
+\item Sonido (detener)
+\end{itemize}
+\begin{figure}[H]
+	\caption{Secuencia de ejemplo de uso Sonido }
+	\includegraphics[scale=0.75]{image49.jpg}
+	\centering
+\end{figure}
+\subsubsection{Botones del Brick}
+Obtiene los datos de los botones del brick.
+Modos de funcionamiento:
+\begin{itemize}
+\item Botones (muestra botón presionado).
+\item modo comparación para botones.
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque de botones del brick }
+	\includegraphics[scale=0.5]{image55.jpg}
+	\centering
+\end{figure}
+\subsubsection{Motores (mover la dirección)}
+Se asume que el robot tiene dos motores grandes, uno para el lado derecho del vehículo y otro para el lado izquierdo.Este bloque mueve el vehículo con un valor de potencia indicado(entre -100 y 100) y una dirección deseada.
+Modos de funcionamiento:
+\begin{itemize}
+\item Encendido.
+\item Encendido por segundos.
+\item Encendido por grados o rotaciones.
+\item Apagado
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque motor dirección }
+	\includegraphics[scale=0.75]{image56.jpg}
+	\centering
+\end{figure}
+\subsubsection{Motores (mover Tanque)}
+Este bloque mueve el vehículo con un valor de potencia diferente para cada motor.
+Modos de funcionamiento:
+\begin{itemize}
+\item Encendido.
+\item Encendido por segundos.
+\item Encendido por grados o rotaciones.
+\item Apagado
+\end{itemize}
+\begin{figure}[H]
+	\caption{Bloque motor Tanque}
+	\includegraphics[scale=0.75]{image58.jpg}
+	\centering
+\end{figure}
+\subsubsection{Motores (motor grande y motor mediano )}
+Estes bloques mueven el vehículo con un valor de potencia diferente para cada motor.Un
+número positivo implica un giro en el sentido de las agujas del reloj y un
+número negativo un giro en el sentido contrario al de las agujas del reloj.
+Modos de funcionamiento:
+\begin{itemize}
+\item Encendido.
+\item Encendido por segundos.
+\item Encendido por grados o rotaciones.
+\item Apagado
+\end{itemize}
+\begin{figure}
+\begin{minipage}{0.45\linewidth}
+  \centering
+  \begin{subfigure}{.7\textwidth}
+	\caption{Bloque motor Grande}
+	\includegraphics{image61.jpg}
+	\label{fig:sub1}
+  \end{subfigure} %
+  \end{minipage}
+  \hspace{0.5cm}
+  \begin{minipage}{0.45\linewidth}
+  \begin{subfigure}{.7\textwidth}
+	\caption{Bloque motor mediano}
+	\includegraphics{image62.jpg}
+	\label{fig:sub2}
+  \end{subfigure}
+\end{minipage}
+  \caption{Motores mediano y grande}
+\end{figure}
+\subsubsection{Sensor de ultrasonidos}
+\subsubsection{Sensor de infrarrojos}
+\subsubsection{Sensor giroscopio}
+\subsubsection{Sensor de color}
+\subsubsection{Sensor de rotación del motor}
+\subsubsection{Sensor de contacto}
+\subsubsection{Sensor de temperatura}
+\subsubsection{Temporizador}
+\subsubsection{Espera}
+\subsection{Control de flujo}
+\subsubsection{Condicionales}
+\subsubsection{Bucles}
+\subsubsection{Break}
 \end{document}
