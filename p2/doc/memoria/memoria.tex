@@ -661,14 +661,57 @@ En este ejemplo veremos un robot que tiene el siguiente comportamiento :
 \begin{itemize}
 \item Sale de situaciones de colisión.
 \item Evita situaciones de colisión.
-\item Sigue paredes.
+\item Avanza
 \item Se dirige hacia la Luz.
 \item recoge una caja de determinado color.
 \end{itemize}
+Se incluyen estas imágenes en la carpeta img/ para poder verlas con un mayor detalle, sus nombres son de la forma Robot*.png
 \subsection{Controlador Global}
+\begin{figure}[H]
+	\caption{Controlador global robot}
+	\includegraphics[scale=0.45]{RobotControladorGlobal.PNG}
+\end{figure}
+Se realizan de forma paralela pero controlando su ejecución con variables bool, cada modulo activa el anterior para asegurarnos unas precondiciones antes de ejecutar un determinado comportamiento.Cuando cambia de modo se imprime en la pantalla del brick.
 \subsection{Salir de situaciones de Colisión}
+\begin{figure}[H]
+	\caption{salir de situaciones de colisión}
+	\includegraphics{RobotDesatascar.PNG}
+	\centering
+\end{figure}
+Gira hasta que su pulsador, situado en la parte delantera es soltado, este se presionaria si el robot chocase con algo.Este comportamiento aparece muy pocas veces ya que se suelen eviar las situaciones de colisión.De ahí su sencillez.
 \subsection{Evitar situaciones de colisión}
-\subsection{Sigue Paredes}
+\begin{figure}[H]
+	\caption{Evitar colisiones con ultrasonidos}
+	\includegraphics[scale=0.45]{RobotEsquivar.PNG}
+	\centering
+\end{figure}
+Usa el sensor de ultrasonidos para saber a que distancia tiene la pared hacia la que está avanzando, cuando esta distancia llega a un umbral, gira.
+\subsection{Avanzar}
+\begin{figure}[H]
+	\caption{avanzar}
+	\includegraphics[scale=0.45]{RobotAvanzar.PNG}
+	\centering
+\end{figure}
+Avanza mientras la luz no decrezca respecto a una medida anterior es decir, se esté alejando de la luz.
 \subsection{Se dirige hacia la Luz}
+\begin{figure}[H]
+	\caption{capturar luz}
+	\includegraphics[scale=0.45]{RobotLuzMayorGood.PNG}
+	\centering
+\end{figure}
+Gira hacia la luz, haciendo diferentes medidas previas.
 \subsection{Recoge una caja}
+Aquí diferenciamos dos comportamientos, encarar la caja y acercarse para posteriormente recogerla.
+\subsubsection{Acercarse a la caja}
+\begin{figure}[H]
+	\caption{Acercarse a la caja}
+	\includegraphics[scale=0.45]{RobotLuzMayorCaja.PNG}
+	\centering
+\end{figure}
+\subsubsection{Recoger la caja} 
+\begin{figure}[H]
+	\caption{recoger la caja}
+	\includegraphics[scale=0.45]{RobotCapturarCaja.PNG}
+	\centering
+\end{figure}
 \end{document}
