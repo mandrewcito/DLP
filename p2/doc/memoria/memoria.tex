@@ -71,8 +71,8 @@
 
 Mindstorms EV3 es un lenguaje de programación creado para interactuar con el kit 
 Mindstorms EV3 de Lego. Esta diseñado para robots modulares que se construyen 
-con piezas de Lego, por lo que son de coste "reducido". Estos robots utilizan 
-piezas de la linea Technic con sensores y actuadores de bajo coste, con un 
+con piezas de Lego, por lo que son de coste <<reducido>>. Estos robots utilizan 
+piezas de la línea Technic con sensores y actuadores de bajo coste, con un 
 módulo de control (brick) que tiene la potencia de un smartphone de gama baja.
 
 \subsection{Características del brick}
@@ -714,4 +714,67 @@ Aquí diferenciamos dos comportamientos, encarar la caja y acercarse para poster
 	\includegraphics[scale=0.45]{RobotCapturarCaja.PNG}
 	\centering
 \end{figure}
+
+\section{Comparación con lenguajes tradicionales.}
+\subsection{Memoria}
+En lenguajes tradicionales como Fortran, C o Pascal, es necesario reservar y 
+liberar la memoria de forma manual.
+
+Sin embargo en lenguaje de bloques de Lego, la memoria se maneja de forma 
+automática. No es necesario reservar espacio explícitamente para almacenar una 
+variable, y posteriormente liberarlo. De modo que incluye un recolector de 
+basura para las variables que ya no se emplean.
+
+\subsection{Intérprete}
+El IDE es en realidad un compilador a un lenguaje intermedio llamado bytecode 
+que es propiedad de Lego. Cada bloque es transcrito en una serie de 
+instrucciones, que forman un <<clump>>. Estos fragmentos, se tratan como tareas 
+indivisibles, y son las que se ejecutarán siguiendo el orden establecido por la 
+máquina virtual de Lego. Para la ejecución de un <<clump>>, todos los bloques de 
+los que depende, deben haberse ejecutado. Esto posibilita la paralelización de 
+las ejecuciones.
+
+\subsection{Paralelismo}
+Algunos lenguajes de alto nivel, proporcionan un mecanismo sencillo para manejar 
+operaciones que se realizan en segundo plano. Otros, sin embargo no incluyen 
+dicha facilidad, relegando al programador la tarea de diseñar un mecanismo para 
+realizar varias acciones a la vez.
+
+En un lenguaje, donde se busca la simplicidad y facilidad de uso, el paralelismo 
+se realiza de forma transparente para el usuario. De forma que los mecanismos 
+para controlar que tarea se debe realizar, y de que manera se comparte el cpu 
+entre tareas, quedan fuera del alcance del programador.
+
+Para realizar una ejecución paralela, basta con emplear una bifurcación en el 
+cable que conecta dos bloques, para incluir dos o mas bloques cuya conexión 
+parte del mismo lugar. De esta forma cualquier bloque conectado, será ejecutado 
+en paralelo.
+
+El modo de resolver los problemas de acceso entre las variables se soluciona 
+compartiendolas de forma global. Sin embargo, de forma interna, se mantiene un 
+registro de todas las variables, protegidas mediante mutex, para el correcto 
+funcionamiento de los bloques en paralelo.
+
+\subsection{Funciones}
+Las clásicas funciones, son ahora reemplazadas por bloques que engloban un 
+funcionamiento concreto. Son aquellos creados por el mecanismo de bloques 
+propios, y que realizan un conjunto de operaciones definidas en un plano aparte 
+del programa. Lo que permite centrarse en la resolución de un problema, pequeño, 
+y concreto.
+
+Los argumentos de las funciones, son siempre pasados por valor, empleando las 
+conexiones a unos bloques especiales.
+
+\subsection{Recursión}
+Lego Mindstorms EV3 no soporta la recursión. Sin embargo hay otros entornos como  
+LeJOS EV3 (Java, gratuíto) y ROBOTC (C, no gratuíto), que sí la soportan.
+
+\subsection{Polimorfismo}
+De igual manera que lenguajes de alto nivel como Java, soportan el polimorfismo, 
+el bytecode de Lego también lo hace. Sin embargo, se realiza de manera 
+transparente para el usuario. Por ejemplo, en la comparación de dos enteros de 
+distinto tamaño, 32 y 16 bits, se realiza previamente una conversión a tipos de 
+32 bits.
+
+
 \end{document}
