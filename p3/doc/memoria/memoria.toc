@@ -1,0 +1,12 @@
+\select@language {spanish}
+\contentsline {section}{\numberline {1}Introducci\IeC {\'o}n}{3}
+\contentsline {section}{\numberline {2}Paradigmas}{3}
+\contentsline {section}{\numberline {3}Gesti\IeC {\'o}n de memoria}{3}
+\contentsline {section}{\numberline {4}Sistema de tipos}{3}
+\contentsline {section}{\numberline {5}Tipos de dato b\IeC {\'a}sicos}{3}
+\contentsline {section}{\numberline {6}Operadores}{3}
+\contentsline {section}{\numberline {7}Visibilidad}{3}
+\contentsline {section}{\numberline {8}Tratamiento de errores}{3}
+\contentsline {section}{\numberline {9}Programas o trozos de c\IeC {\'o}digo}{3}
+\contentsline {section}{\numberline {10}Ventajas y desventajas}{3}
+\contentsline {section}{\numberline {11}Necesidades especiales (IDES y depuraci\IeC {\'o}n)}{3}
