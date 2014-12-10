@@ -66,27 +66,64 @@
 \clearpage 
 
 \section{Introducción}
+Este lenguaje, que está enfocado a las operaciones matemáticas pretende utilizar al máximo la capacidad de la GPU que tenga el ordenador que lo ejecute para así liberar de cálculos a la CPU y así hacer  una ejecución más eficiente. A grandes rasgos, vamos a hacer un lenguaje como C pero añadiendole funcionalidades como multiplicación de matrices.
 \section{Paradigmas}
+Programación imperativa utilizando funciones.
 \section{Gestión de memoria}
+Manual, se especifican tamaños o se inicializan las variables con un valor determinado.
 \section{Sistema de tipos}
+Tipado estático, deben especificarse todos los tipos de las variables. En las matrices se deben especificar sus dimensiones y su tipo, que sólo puede ser uno no se permiten matrices heterogeneas. 
 \section{Tipos de dato}
 \subsection{Básicos}
+\begin{itemize}
+\item Int.
+\item Double.
+\item Float.
+\item Char.
+\item Punteros a tipos básicos(como en C).
+\end{itemize}
 \subsection{Complejos}
+\begin{itemize}
+\item Vectores.
+\item Matrices.
+\end{itemize}
 \section{Operadores}
 \subsection{Tabla de operadores}
+Mismos que en C.
 \subsection{Sobrecarga operadores}
+Se añaden (sobrecargando los operadores) las operaciones con vectores y matrices.
 \section{Visibilidad}
 \subsection{Visibilidad Local}
+A nivel de función.
 \subsection{Visibilidad Global}
+A nivel de programa.
 \section{Tratamiento de errores}
 \subsection{Matemáticos}
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Errores :
+\begin{itemize}
+\item algo
+\end{itemize}
 \subsection{Overflow}
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Errores :
+\begin{itemize}
+\item algo
+\end{itemize}
 \subsection{Segmentación}
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Errores :
+\begin{itemize}
+\item algo
+\end{itemize}
 \section{Programas o trozos de código}
 \section{Ventajas y desventajas}
 \subsection{Optimizaciones en cálculos}
+Añadimos el paralelismo de la GPU para agilizar los cálculos de matrices y vectores. 
 \section{Necesidades especiales}
 \subsection{IDE}
 \subsection{Puntos de interrupción}
+Se puede compilar de forma secuencial en la CPU para así poder depurar sin problemas y después poder optimizar el cálculo haciéndolo de forma paralela.
 \subsection{Gráfica}
+Necesidad de una targeta gráfica que soporte OpenCL para poder utilizar la ejecución en paralelo.
 \end{document}
