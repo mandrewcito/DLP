@@ -1,0 +1,185 @@
+% Usar el tipo de documento: Artículo científico.
+\documentclass[12pt,a4paper]{article}
+
+% Cargar mensajes en español.
+\usepackage[spanish]{babel}
+
+% Usar codificación utf-8 para acentos y otros.
+\usepackage[utf8]{inputenc}
+
+%Dimensiones de los márgenes.
+\usepackage[margin=1.5cm]{geometry}
+
+% Insertar porciones de código
+\usepackage{listings}
+
+% Comenzar párrafos con separación no indentación.
+\usepackage{parskip}
+
+% Usar gráficos
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+%
+% Usar contenedores flotantes para figuras.
+\usepackage{float}
+
+% Carpeta de las imágenes.
+\graphicspath{{img/}}
+
+% Configuración para porciones de código.
+\lstset{
+%	language=bash,
+	basicstyle=\ttfamily\small,
+%	numberstyle=\footnotesize,
+%	numbers=left,
+%	backgroundcolor=\color{gray!10},
+%	frame=single,
+	tabsize=4,
+%	rulecolor=\color{black!30},
+%	title=\lstname,
+%	escapeinside={\%*}{*)},
+	breaklines=true,
+	breakatwhitespace=true,
+%	framextopmargin=2pt,
+%	framexbottommargin=2pt,
+	extendedchars=false,
+	inputencoding=utf8
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Propiedades
+\title{Diseño de un lenguaje de Programación}
+
+\author{Andrés Baamonde Lozano (andres.baamonde@udc.es)\\
+	Rodrigo Arias Mallo (rodrigo.arias@udc.es)}
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage 
+
+\tableofcontents
+
+\clearpage 
+
+\section{Introducción}
+Este lenguaje, que está enfocado a las operaciones matemáticas pretende utilizar al máximo la capacidad de la GPU que tenga el ordenador que lo ejecute para así liberar de cálculos a la CPU y así hacer  una ejecución más eficiente. A grandes rasgos, vamos a hacer un lenguaje como C pero añadiendole funcionalidades como multiplicación de matrices.
+\section{Paradigmas}
+Programación imperativa utilizando funciones.
+\section{Gestión de memoria}
+Manual, se especifican tamaños o se inicializan las variables con un valor determinado.A la hora de liberar el espacio de las variables se operará
+\section{Sistema de tipos}
+Tipado estático, deben especificarse todos los tipos de las variables. En las matrices se deben especificar sus dimensiones y su tipo, que sólo puede ser uno no se permiten matrices heterogeneas. 
+\section{Tipos de dato}
+\subsection{Básicos}
+\begin{itemize}
+\item Int.
+\item Double.
+\item Float.
+\item Char.
+\item Punteros a tipos básicos(como en C).
+\end{itemize}
+\subsection{Complejos}
+\begin{itemize}
+\item Vectores.
+\item Matrices.
+\item Números imaginarios.
+\end{itemize}
+\subsection{Modificadores de Tipos}
+Existirán unos modificadores que permitirán compartir un determinado dato con la GPU para así, en caso de que sea frecuentemente usado, evitar el tiempo de enviarlo reiteradamente.
+\section{Operadores}
+\subsection{Tabla de operadores}
+Para utilizar la GPU al máximo, lo más adecuado sería utilizar una tabla de operadores como la de openCL. A mayores se incorporarán las funciones típicas de imágenes, como convoluciones y filtros. En estos últimos se podrán aprovechar al máximo las propiedades de las gráficas como el acceso a la memoria de los núcleos vecinos.
+\\
+\begin{tabular}{ l c r }
+  add & + \\
+  substract & - \\
+  multiply & * \\
+  divide &  / \\
+  remainder &\% \\
+  unary plus & + \\
+  unary minus & - \\
+  post and pre increment & ++\\
+  post and pre decrement& --\\
+  relational greater than & \textgreater \\
+  relational less than & \textless \\
+  relational greater-than or equal-to & \textgreater = \\
+  relational less-than or equal-to & \textless= \\
+  equal & == \\
+  not equal  & != \\
+  bitwise and & \& \\
+  bitwise or &  | \\
+  bitwise not & \textasciicircum \\
+  bitwise not & \textasciitilde \\
+  logical and & \&\& \\
+  logical or & || \\
+  logical exclusive or & \textasciicircum\textasciicircum \\
+  logical unary not & ! \\
+  ternary selection & ?: \\
+  right shift & \textgreater\textgreater \\
+  left shift & \textless\textless \\
+  size of & sizeof \\
+  comma &, \\
+  dereference & * \\
+  address-of & \& \\
+  assignment & = \\	
+\end{tabular}
+\subsection{Sobrecarga operadores}
+\subsubsection{Introducción}
+Se añaden (sobrecargando los operadores) las operaciones con vectores y matrices. El compilador podrá detectar posibles errores gracias al tipado estático.
+\subsubsection{Operadores vectoriales}
+Suma, multiplicación y resta. Estos operadores funcionarían con los tipos vector y matriz, pero también para su multiplicación por un escalar.
+\section{Visibilidad}
+\subsection{Visibilidad Local}
+A nivel de función, la variable es accesible y puede manipulada sólo en la función que es declarada. 
+\subsection{Visibilidad Global}
+A nivel de programa,la variable es accesible y puede ser  manipulada en todo el programa.
+\section{Tratamiento de errores}
+\subsection{Matemáticos}
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Errores :
+\begin{itemize}
+\item División entre 0.
+\item Raíz de un número negativo(sin ser el destino un número imaginario).
+\end{itemize}
+\subsection{Overflow}
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Errores :
+\begin{itemize}
+\item algo
+\end{itemize}
+\subsection{Segmentación}
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Errores :
+\begin{itemize}
+\item Desreferenciación punteros NULL.
+\item Intento de acceder a memoria que el programa no tiene permisos.
+\item Intentar acceder a una dirección de memoria inexistente.
+\item Intentar escribir memoria de sólo lectura.
+\item Un desbordamiento de búfer. 
+\item Usando punteros no inicializados.
+\end{itemize}
+\section{Programas o trozos de código}
+\section{Ventajas y desventajas}
+\subsection{Características}
+Además de la programación normal del lenguaje, se permitirá añadir trozos de código directamente en OpenCL, que nos permiten manejar la GPU manualmente y así optimizar más nuestro código. \\
+También se incluyen operadores para la sincronización entre procesos y bloqueos para la posible concurrencia a una misma variable.Tarea que el planificador en las operaciones implementadas hará automáticamente.
+\subsection{Optimizaciones en cálculos}
+Añadimos el paralelismo de la GPU para agilizar los cálculos de matrices y vectores. 
+\section{Necesidades especiales}
+\subsection{IDE}
+\subsection{Puntos de interrupción}
+Se puede compilar de forma secuencial en la CPU para así poder depurar sin problemas y después poder optimizar el cálculo haciéndolo de forma paralela.
+\subsection{Gráfica}
+Necesidad de una targeta gráfica que soporte OpenCL para poder utilizar la ejecución en paralelo.
+\section{Arquitectura}
+\subsection{Compilador}
+Se dispondría de una especie de planificador, que detectaría el código paralelo, lo dispondría en forma de grafo de ejecución.Una vez identificadas las partes que pueden ir en paralelo, con esas partes se dividirían en bloques en función al hardware disponible y posteriormente se enviarían al a GPU.\\
+El codigo paraĺelo es especificado por el programador a través de los operadores específicos(los operadores vectorialess).\\
+En caso de hacer una operación entre tipos diferentes, el compilador transformará el dato en el tipo necesario(si es posible) solo sí el dato de donde se va a almacenar es el correcto.
+\subsection{Errores}
+A la hora de un error en la CPU es de fácil gestión, pero en la GPU nos tendremos que asegurar de que la salída del programa es civilizada.
+\end{document}
