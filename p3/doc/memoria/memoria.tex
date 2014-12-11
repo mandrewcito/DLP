@@ -15,7 +15,8 @@
 
 % Comenzar párrafos con separación no indentación.
 \usepackage{parskip}
-
+%enlaces
+\usepackage{hyperref}
 % Usar gráficos
 \usepackage{graphicx}
 \usepackage{caption}
@@ -83,11 +84,11 @@ matriciales, o operaciones vectoriales, realizadas en paralelo implícitamente.
 Programación imperativa procedural utilizando funciones y estructurado.
 \section{Gestión de memoria}
 Manual, se especifican tamaños o se inicializan las variables con un valor
-determinado. El uso y la limpieza de la memoria corren a cargo del programador.
+determinado. El uso y la limpieza de la memoria corren a cargo del programador.Como en C la gestión de la memoria en tiempo de compilación se hará en la inicialización y la asignación dinámica(en tiempo de ejecución) se hará donde el programador considere oportuno.
 \section{Sistema de tipos}
 Tipado estático, deben especificarse todos los tipos de las variables. En las
 matrices se deben especificar sus dimensiones y su tipo, que sólo puede ser uno
-no se permiten matrices heterogeneas. 
+no se permiten matrices heterogéneas.La comprobación de la tipificación sera en tiempo de compilación por lo que la hará el compilador.Este sistema de tipos incrementa la fiabilidad de los programas procesados.
 \section{Tipos de dato}
 \subsection{Básicos}
 \begin{itemize}
@@ -116,6 +117,7 @@ imágenes, como convoluciones y filtros. En estos últimos se podrán aprovechar
 máximo las propiedades de las gráficas como el acceso a la memoria de los
 núcleos vecinos.
 \\
+\begin{center}
 \begin{tabular}{ l c r }
   add & + \\
   substract & - \\
@@ -149,6 +151,7 @@ núcleos vecinos.
   address-of & \& \\
   assignment & = \\	
 \end{tabular}
+\end{center}
 \subsection{Sobrecarga operadores}
 \subsubsection{Introducción}
 Se añaden (sobrecargando los operadores) las operaciones con vectores y
@@ -175,11 +178,8 @@ Errores :
 \end{itemize}
 \subsection{Overflow}
 Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
-compilador).
-Errores :
-\begin{itemize}
-\item algo
-\end{itemize}
+compilador).\\
+Estos errores se  producen cuando  un programa no controla adecuadamente la cantidad de datos que se copian sobre un área de memoria reservada a tal efecto.Si esa cantidad es superior a la anteriormente asignada los bytes se almacenan contiguamente pisando el contenido que pudiera existir previamente.
 \subsection{Segmentación}
 Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
 compilador).
@@ -192,7 +192,6 @@ Errores :
 \item Un desbordamiento de búfer. 
 \item Usando punteros no inicializados.
 \end{itemize}
-\section{Programas o trozos de código}
 \section{Características}
 \subsection{Inserción de código OpenCL}
 Además de la programación normal del lenguaje, se permitirá añadir trozos de
@@ -201,6 +200,7 @@ optimizar más nuestro código.
  \\ También se incluyen operadores para la sincronización entre procesos y
  bloqueos para la posible concurrencia a una misma variable.Tarea que el
  planificador en las operaciones implementadas hará automáticamente.
+\section{Programas o trozos de código}
 \subsection{Suma de vectores}
 Ejemplo sin paralelizar:
 \begin{lstlisting}
@@ -341,9 +341,17 @@ Cuanto más grande sea la matriz o el vector, más se aprecia la aceleración en
 paralelo.
 \section{Necesidades especiales}
 \subsection{IDE}
-\subsection{Puntos de interrupción}
+\subsection{Debug}
 Se puede compilar de forma secuencial en la CPU para así poder depurar sin
-problemas y después poder optimizar el cálculo haciéndolo de forma paralela.
+problemas en algoritmo en una primera versión y después poder optimizar el cálculo haciéndolo de forma paralela. Esto se propone debido a que el debug de un procesamiento paralelo es tedioso.
+\subsection{Puntos de interrupción}
+Al parar el proceso podemos inspeccionar el valor de las variables, los argumentos de la pila, y las direcciones de memoria sin que el proceso modifique estos valores hasta que no se lo indicas de esa forma al depurador.\\
+También podemos inspeccionar el valor de los registros del procesador e incluso podemos cambiar cualquier dato tanto en los registros como en la memoria si queremos. Los breakpoints son sin duda la característica más comúnmente utilizada en un depurador. Por lo que serán incorporados a nuestro lenguaje.
+\\ Existen dos tipos de breakpoints:
+\begin{itemize}
+\item software breakpoints(se usan específicamente para detener la CPU cuando se ejecuta una instrucción)
+\item hardware breakpoints(a nivel de procesador no implementados por un lenguaje)
+\end{itemize}
 \subsection{Gráfica}
 Necesidad de una targeta gráfica que soporte OpenCL para poder utilizar la
 ejecución en paralelo.
@@ -361,4 +369,12 @@ donde se va a almacenar es el correcto.
 \subsection{Errores}
 A la hora de un error en la CPU es de fácil gestión, pero en la GPU nos
 tendremos que asegurar de que la salída del programa es civilizada.
+\section{Fuentes}
+\begin{itemize}
+\item \href{https://www.khronos.org/assets/uploads/developers/library/overview/opencl_overview.pdf}{ Funcionamiento OpenCL}
+\item \href{https://www.khronos.org/registry/cl/sdk/2.0/docs/man/xhtml/operators.html}{Operadores OpenCL}
+\item Transformar operaciones de Matrices para GPU:
+\item \href{https://www.khronos.org/assets/uploads/developers/library/overview/opencl_overview.pdf#page=8}{Funcionamiento GPU}
+\item \href{https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#page=51}{Modificadores de tipos}
+\end{itemize}
 \end{document}
