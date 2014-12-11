@@ -122,7 +122,8 @@ int main(int argc, char *argv[])
 	context = clCreateContext( NULL, 1, &device_id, NULL, NULL, &ret);
 
 	/* Create Command Queue */
-	command_queue = clCreateCommandQueue(context, device_id, 0, &ret);
+	//command_queue = clCreateCommandQueue(context, device_id, 0, &ret);
+	command_queue = clCreateCommandQueue(context, device_id, CL_QUEUE_PROFILING_ENABLE, &ret);
 
 	/* Create Memory Buffer */
 	memobjA = clCreateBuffer(context, CL_MEM_READ_ONLY, widthA * heightA * sizeof(float), NULL, &ret);
@@ -166,12 +167,24 @@ int main(int argc, char *argv[])
 	//ret = clEnqueueTask(command_queue, kernel, 0, NULL,NULL);
 	size_t globalThreads[2] = {widthA, heightB};
 	size_t localThreads[2] = {nl,nl};
+	
+	cl_event prof_event; 
 
 	tic = usec();
 	
-	clEnqueueNDRangeKernel(command_queue, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, NULL);
+	clEnqueueNDRangeKernel(command_queue, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, &prof_event);
 
+	cl_ulong ev_start_time=(cl_ulong)0;
+	cl_ulong ev_end_time=(cl_ulong)0;
+
+	clFinish(command_queue);
 	tic = usec() - tic;
+	/*
+	clWaitForEvents(1, &prof_event);
+	clGetEventProfilingInfo(prof_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &ev_start_time, NULL);
+	clGetEventProfilingInfo(prof_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &ev_end_time, NULL);
+	double cgpu = (double)(ev_end_time - ev_start_time)/1000; // in usec
+*/
 	printf("GPU comp.:\t%E us\n", tic);
 	
 	tic = usec();
