@@ -332,3 +332,18 @@ CPU comp.:	1.123165E+07 us
 CPU comp.:	11231649.000000 us
 Aceleración:	1058.391349
 Fallos comp.:	0
+
+
+Tamaño de matriz: 2048x2048
+Tamaño de grupo: 16x16
+CL_DEVICE_MAX_WORK_ITEM_SIZES:  512 / 512 / 64 
+GPU envío:      2.168600E+04 us
+GPU comp.:      2.418712E+06 us
+GPU recep.:     1.743300E+04 us
+GPU total:      2.458115E+06 us
+GPU total:      2458115.000000 us
+CPU comp.:      1.115366E+08 us
+CPU comp.:      111536649.000000 us
+Aceleración:    45.374870
+Fallos comp.:   0
+Max err.:       0.000000E+00

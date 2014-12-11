@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include <sys/time.h>
 
 #define N 1024
+#define SM 0
 
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
@@ -15,6 +17,7 @@
 #endif
 
 #define MAX_SOURCE_SIZE (0x100000)
+#define ERR 1e-3
 
 void printm(char *name, float *M, int w, int h)
 {
@@ -26,7 +29,7 @@ void printm(char *name, float *M, int w, int h)
 	{
 		for(j = 0; j < h; j++)
 		{
-			printf("%6.0f ", M[i*h + j]);
+			printf("%.10E ", M[i*h + j]);
 		}
 		printf("\n");
 	}
@@ -43,16 +46,17 @@ double usec()
 int main(int argc, char *argv[])
 {
 	int n = N;
-	int nl = 16;
+	//int nl = 16;
 	
 	if(argc >= 2)
 	{
 		n = atoi(argv[1]);
 	}
+	/*
 	if(argc >= 3)
 	{
 		nl = atoi(argv[2]);
-	}
+	}*/
 	int widthA, heightA, widthB, heightB, widthC, heightC;
 	widthA = heightA = widthB = heightB = widthC = heightC = n;
 
@@ -67,17 +71,21 @@ int main(int argc, char *argv[])
 
 	int i, j, k;
 
+	srand48(time(NULL));
+
 	for(i = 0;i < widthA; i++)
 	{
 		for(j=0;j < heightA; j++)
 		{
-			A[i*heightA+j] = i;
-			B[i*heightA+j] = j;
+			//A[i*heightA+j] = i;
+			//B[i*heightA+j] = j;
+			A[i*heightA+j] = (float) drand48() * 100;
+			B[i*heightA+j] = (float) drand48() * 100;
 		}
 	}
 	
 	printf("Tamaño de matriz: %dx%d\n", n, n);
-	printf("Tamaño de grupo: %dx%d\n", nl, nl);
+	//printf("Tamaño de grupo: %dx%d\n", nl, nl);
 
 	//printm("A", A, widthA, heightA);
 	//printm("B", B, widthB, heightB);
@@ -117,6 +125,10 @@ int main(int argc, char *argv[])
 	/* Get Platform and Device Info */
 	ret = clGetPlatformIDs(1, &platform_id, &ret_num_platforms);
 	ret = clGetDeviceIDs( platform_id, CL_DEVICE_TYPE_GPU, 1, &device_id, &ret_num_devices);
+
+	size_t workitem_size[3];
+	clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(workitem_size), &workitem_size, NULL);
+	//printf("CL_DEVICE_MAX_WORK_ITEM_SIZES:\t%u / %u / %u \n", workitem_size[0], workitem_size[1], workitem_size[2]);
 
 	/* Create OpenCL context */
 	context = clCreateContext( NULL, 1, &device_id, NULL, NULL, &ret);
@@ -166,13 +178,13 @@ int main(int argc, char *argv[])
 	/* Execute OpenCL Kernel */
 	//ret = clEnqueueTask(command_queue, kernel, 0, NULL,NULL);
 	size_t globalThreads[2] = {widthA, heightB};
-	size_t localThreads[2] = {nl,nl};
+	//size_t localThreads[2] = {nl,nl};
 	
 	cl_event prof_event; 
 
 	tic = usec();
 	
-	clEnqueueNDRangeKernel(command_queue, kernel, 2, NULL, globalThreads, localThreads, 0, NULL, &prof_event);
+	clEnqueueNDRangeKernel(command_queue, kernel, 2, NULL, globalThreads, NULL, 0, NULL, &prof_event);
 
 	cl_ulong ev_start_time=(cl_ulong)0;
 	cl_ulong ev_end_time=(cl_ulong)0;
@@ -186,7 +198,6 @@ int main(int argc, char *argv[])
 	double cgpu = (double)(ev_end_time - ev_start_time)/1000; // in usec
 */
 	printf("GPU comp.:\t%E us\n", tic);
-	
 	tic = usec();
 
 	/* Copy results from the memory buffer */
@@ -197,10 +208,12 @@ int main(int argc, char *argv[])
 	tic = usec() - tic;
 	printf("GPU recep.:\t%E us\n", tic);
 	printf("GPU total:\t%E us\n", toc);
-	printf("GPU total:\t%f us\n", toc);
+	printf("GPU total:\t%f us\n\n", toc);
 	tgpu = toc;
 
-	//printm("C", C, widthC, heightC);
+#if SM == 1
+	printm("C", C, widthC, heightC);
+#endif
 
 	ret = clFlush(command_queue);
 	ret = clFinish(command_queue);
@@ -215,7 +228,7 @@ int main(int argc, char *argv[])
 
 	free(source_str);
 
-	float sum=0.0;
+	float sum = 0.0;
 	
 	tic = usec();
 
@@ -233,27 +246,35 @@ int main(int argc, char *argv[])
 
 	}
 	
+#if SM == 1
+	printm("D", D, widthC, heightC);
+#endif
+
 	tic = usec() - tic;
 	printf("CPU comp.:\t%E us\n", tic);
-	printf("CPU comp.:\t%f us\n", tic);
+	printf("CPU comp.:\t%f us\n\n", tic);
 	tcpu = tic;
 	
 	printf("Aceleración:\t%f\n", tcpu/tgpu);
 	
 
 	int fallos = 0;
+	float err, err_max = 0.0;
 	for(i = 0;i < widthC; i++)
 	{
 		for(j = 0; j < heightC; j++)
 		{
-			if(D[i*heightC+j] != C[i*heightC+j])
+			err = fabsf(D[i*heightC+j] - C[i*heightC+j]) / fabsf(D[i*heightC+j]);
+			if(err > ERR)
 			{
 				fallos++;
+				err_max = fmaxf(err_max, err);
 			}
 		}
 	}
 
 	printf("Fallos comp.:\t%d\n", fallos);
+	printf("Max err.:\t%E\n", err_max);
 
 	return 0;
 }
