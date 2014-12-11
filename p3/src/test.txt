@@ -1,0 +1,334 @@
+Con 1024x1024 y copy:
+
+GPU computación: 1.980000E+02 us
+GPU transferencia: 2.818150E+05 us
+GPU total: 2.820580E+05 us
+CPU computación: 3.445045E+07 us
+Fallos: 0
+
+Tamaño de las matrices: 512x512
+GPU envío: 2.303000E+03 us
+GPU computación: 1.930000E+02 us
+GPU recepción: 3.832900E+04 us
+GPU total: 3.853800E+04 us
+GPU total: 38538.000000 us
+CPU computación: 1.521708E+06 us
+CPU computación: 1521708.000000 us
+Fallos: 0
+
+Tamaño de las matrices: 2048x2048
+GPU envío: 2.087500E+04 us
+GPU computación: 2.030000E+02 us
+GPU recepción: 2.194309E+06 us
+GPU total: 2.194526E+06 us
+GPU total: 2194526.000000 us
+CPU computación: 2.726058E+08 us
+CPU computación: 272605750.000000 us
+Fallos: 0
+
+Tamaño de las matrices: 1024x1024
+GPU envío: 5.461000E+03 us
+GPU computación: 3.090000E+02 us
+GPU recepción: 2.821170E+05 us
+GPU total: 2.824580E+05 us
+GPU total: 282458.000000 us
+CPU computación: 3.429868E+07 us
+CPU computación: 34298677.000000 us
+Fallos: 0
+
+Tamaño de matriz: 32x32
+GPU envío:	3.130000E+02 us
+GPU comp.:	3.000000E+01 us
+GPU recep.:	1.040000E+02 us
+GPU total:	6.330000E+02 us
+GPU total:	633.000000 us
+CPU comp.:	2.160000E+02 us
+CPU comp.:	216.000000 us
+Aceleración:	0.341232
+Fallos comp.:	0
+
+Tamaño de matriz: 64x64
+GPU envío:	3.260000E+02 us
+GPU comp.:	3.100000E+01 us
+GPU recep.:	3.210000E+02 us
+GPU total:	8.590000E+02 us
+GPU total:	859.000000 us
+CPU comp.:	1.762000E+03 us
+CPU comp.:	1762.000000 us
+Aceleración:	2.051222
+Fallos comp.:	0
+
+Tamaño de matriz: 128x128
+GPU envío:	4.170000E+02 us
+GPU comp.:	3.000000E+01 us
+GPU recep.:	1.049000E+03 us
+GPU total:	1.677000E+03 us
+GPU total:	1677.000000 us
+CPU comp.:	1.458200E+04 us
+CPU comp.:	14582.000000 us
+Aceleración:	8.695289
+Fallos comp.:	0
+
+Tamaño de matriz: 256x256
+GPU envío:	7.310000E+02 us
+GPU comp.:	3.000000E+01 us
+GPU recep.:	5.649000E+03 us
+GPU total:	6.607000E+03 us
+GPU total:	6607.000000 us
+CPU comp.:	1.341840E+05 us
+CPU comp.:	134184.000000 us
+Aceleración:	20.309369
+Fallos comp.:	0
+
+Tamaño de matriz: 512x512
+GPU envío:	2.256000E+03 us
+GPU comp.:	1.960000E+02 us
+GPU recep.:	3.701500E+04 us
+GPU total:	3.971200E+04 us
+GPU total:	39712.000000 us
+CPU comp.:	1.244697E+06 us
+CPU comp.:	1244697.000000 us
+Aceleración:	31.343095
+Fallos comp.:	0
+
+Tamaño de matriz: 1024x1024
+GPU envío:	5.468000E+03 us
+GPU comp.:	2.020000E+02 us
+GPU recep.:	2.815870E+05 us
+GPU total:	2.875120E+05 us
+GPU total:	287512.000000 us
+CPU comp.:	3.383940E+07 us
+CPU comp.:	33839399.000000 us
+Aceleración:	117.697345
+Fallos comp.:	0
+Tamaño de matriz: 32x32
+Tamaño de grupo: 16x16
+GPU envío:	3.410000E+02 us
+GPU comp.:	3.100000E+01 us
+GPU recep.:	1.030000E+02 us
+GPU total:	6.700000E+02 us
+GPU total:	670.000000 us
+CPU comp.:	3.900000E+01 us
+CPU comp.:	39.000000 us
+Aceleración:	0.058209
+Fallos comp.:	0
+Tamaño de matriz: 64x64
+Tamaño de grupo: 16x16
+GPU envío:	3.220000E+02 us
+GPU comp.:	3.000000E+01 us
+GPU recep.:	3.130000E+02 us
+GPU total:	8.520000E+02 us
+GPU total:	852.000000 us
+CPU comp.:	3.190000E+02 us
+CPU comp.:	319.000000 us
+Aceleración:	0.374413
+Fallos comp.:	0
+Tamaño de matriz: 128x128
+Tamaño de grupo: 16x16
+GPU envío:	4.210000E+02 us
+GPU comp.:	3.100000E+01 us
+GPU recep.:	1.041000E+03 us
+GPU total:	1.681000E+03 us
+GPU total:	1681.000000 us
+CPU comp.:	3.801000E+03 us
+CPU comp.:	3801.000000 us
+Aceleración:	2.261154
+Fallos comp.:	0
+Tamaño de matriz: 256x256
+Tamaño de grupo: 16x16
+GPU envío:	7.150000E+02 us
+GPU comp.:	2.900000E+01 us
+GPU recep.:	5.717000E+03 us
+GPU total:	6.652000E+03 us
+GPU total:	6652.000000 us
+CPU comp.:	3.618900E+04 us
+CPU comp.:	36189.000000 us
+Aceleración:	5.440319
+Fallos comp.:	0
+Tamaño de matriz: 512x512
+Tamaño de grupo: 16x16
+GPU envío:	2.268000E+03 us
+GPU comp.:	1.940000E+02 us
+GPU recep.:	3.685400E+04 us
+GPU total:	3.955500E+04 us
+GPU total:	39555.000000 us
+CPU comp.:	3.335090E+05 us
+CPU comp.:	333509.000000 us
+Aceleración:	8.431526
+Fallos comp.:	0
+Tamaño de matriz: 1024x1024
+Tamaño de grupo: 16x16
+GPU envío:	5.422000E+03 us
+GPU comp.:	2.020000E+02 us
+GPU recep.:	2.822060E+05 us
+GPU total:	2.880840E+05 us
+GPU total:	288084.000000 us
+CPU comp.:	1.220522E+07 us
+CPU comp.:	12205220.000000 us
+Aceleración:	42.366879
+Fallos comp.:	0
+Tamaño de matriz: 32x32
+Tamaño de grupo: 32x32
+GPU envío:	3.270000E+02 us
+GPU comp.:	2.000000E+00 us
+GPU recep.:	1.700000E+02 us
+GPU total:	6.830000E+02 us
+GPU total:	683.000000 us
+CPU comp.:	4.000000E+01 us
+CPU comp.:	40.000000 us
+Aceleración:	0.058565
+Fallos comp.:	1024
+Tamaño de matriz: 64x64
+Tamaño de grupo: 32x32
+GPU envío:	3.240000E+02 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	2.220000E+02 us
+GPU total:	7.390000E+02 us
+GPU total:	739.000000 us
+CPU comp.:	3.180000E+02 us
+CPU comp.:	318.000000 us
+Aceleración:	0.430311
+Fallos comp.:	4096
+Tamaño de matriz: 128x128
+Tamaño de grupo: 32x32
+GPU envío:	4.220000E+02 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	2.600000E+02 us
+GPU total:	8.640000E+02 us
+GPU total:	864.000000 us
+CPU comp.:	3.765000E+03 us
+CPU comp.:	3765.000000 us
+Aceleración:	4.357639
+Fallos comp.:	16384
+Tamaño de matriz: 256x256
+Tamaño de grupo: 32x32
+GPU envío:	7.230000E+02 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	5.770000E+02 us
+GPU total:	1.494000E+03 us
+GPU total:	1494.000000 us
+CPU comp.:	3.531100E+04 us
+CPU comp.:	35311.000000 us
+Aceleración:	23.635207
+Fallos comp.:	65536
+Tamaño de matriz: 512x512
+Tamaño de grupo: 32x32
+GPU envío:	2.286000E+03 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	1.670000E+03 us
+GPU total:	4.188000E+03 us
+GPU total:	4188.000000 us
+CPU comp.:	5.964450E+05 us
+CPU comp.:	596445.000000 us
+Aceleración:	142.417622
+Fallos comp.:	262144
+Tamaño de matriz: 1024x1024
+Tamaño de grupo: 32x32
+GPU envío:	5.560000E+03 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	4.997000E+03 us
+GPU total:	1.081500E+04 us
+GPU total:	10815.000000 us
+CPU comp.:	1.226350E+07 us
+CPU comp.:	12263503.000000 us
+Aceleración:	1133.934628
+Fallos comp.:	0
+Tamaño de matriz: 64x64
+Tamaño de grupo: 64x64
+GPU envío:	3.470000E+02 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	2.100000E+02 us
+GPU total:	7.470000E+02 us
+GPU total:	747.000000 us
+CPU comp.:	3.180000E+02 us
+CPU comp.:	318.000000 us
+Aceleración:	0.425703
+Fallos comp.:	4096
+Tamaño de matriz: 128x128
+Tamaño de grupo: 64x64
+GPU envío:	4.240000E+02 us
+GPU comp.:	2.000000E+00 us
+GPU recep.:	3.270000E+02 us
+GPU total:	9.390000E+02 us
+GPU total:	939.000000 us
+CPU comp.:	3.766000E+03 us
+CPU comp.:	3766.000000 us
+Aceleración:	4.010650
+Fallos comp.:	16384
+Tamaño de matriz: 256x256
+Tamaño de grupo: 64x64
+GPU envío:	7.230000E+02 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	5.170000E+02 us
+GPU total:	1.438000E+03 us
+GPU total:	1438.000000 us
+CPU comp.:	3.718900E+04 us
+CPU comp.:	37189.000000 us
+Aceleración:	25.861613
+Fallos comp.:	65536
+Tamaño de matriz: 512x512
+Tamaño de grupo: 64x64
+GPU envío:	2.248000E+03 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	1.707000E+03 us
+GPU total:	4.194000E+03 us
+GPU total:	4194.000000 us
+CPU comp.:	3.336620E+05 us
+CPU comp.:	333662.000000 us
+Aceleración:	79.556986
+Fallos comp.:	262144
+Tamaño de matriz: 1024x1024
+Tamaño de grupo: 64x64
+GPU envío:	5.375000E+03 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	4.977000E+03 us
+GPU total:	1.059600E+04 us
+GPU total:	10596.000000 us
+CPU comp.:	1.129736E+07 us
+CPU comp.:	11297359.000000 us
+Aceleración:	1066.190921
+Fallos comp.:	0
+Tamaño de matriz: 128x128
+Tamaño de grupo: 128x128
+GPU envío:	4.610000E+02 us
+GPU comp.:	2.000000E+00 us
+GPU recep.:	1.850000E+02 us
+GPU total:	8.470000E+02 us
+GPU total:	847.000000 us
+CPU comp.:	3.801000E+03 us
+CPU comp.:	3801.000000 us
+Aceleración:	4.487603
+Fallos comp.:	16384
+Tamaño de matriz: 256x256
+Tamaño de grupo: 128x128
+GPU envío:	7.190000E+02 us
+GPU comp.:	2.000000E+00 us
+GPU recep.:	5.320000E+02 us
+GPU total:	1.445000E+03 us
+GPU total:	1445.000000 us
+CPU comp.:	3.386600E+04 us
+CPU comp.:	33866.000000 us
+Aceleración:	23.436678
+Fallos comp.:	65536
+Tamaño de matriz: 512x512
+Tamaño de grupo: 128x128
+GPU envío:	2.250000E+03 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	1.674000E+03 us
+GPU total:	4.154000E+03 us
+GPU total:	4154.000000 us
+CPU comp.:	7.262670E+05 us
+CPU comp.:	726267.000000 us
+Aceleración:	174.835580
+Fallos comp.:	262144
+Tamaño de matriz: 1024x1024
+Tamaño de grupo: 128x128
+GPU envío:	5.350000E+03 us
+GPU comp.:	3.000000E+00 us
+GPU recep.:	5.022000E+03 us
+GPU total:	1.061200E+04 us
+GPU total:	10612.000000 us
+CPU comp.:	1.123165E+07 us
+CPU comp.:	11231649.000000 us
+Aceleración:	1058.391349
+Fallos comp.:	0
