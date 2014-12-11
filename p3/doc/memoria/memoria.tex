@@ -66,29 +66,33 @@
 
 \clearpage 
 
-
-
 \section{Introducción}
+\subsection{Propósito y contextualización}
 En este documento se propone un lenguaje de programación orientado al cálculo 
 numérico. La sintaxis es idéntica a C, con nuevas funcionalidades.
 
 El objetivo consiste en explotar la capacidad de las máquinas modernas de 
 realizar computaciones en paralelo. Tanto de las tarjetas gráficas (GPU) como de 
 los procesadores multinúcleo (CPU). Y emplear esta capacidad para acelerar los 
-procesos de cómputo que sean paralelizables y así hacer una ejecución más 
-eficiente.
+procesos de cómputo que sean paralelizables y así hacer una ejecución más eficiente.
 
 En concreto, se introducirán operaciones como el cálculo de productos 
 matriciales, o operaciones vectoriales, realizadas en paralelo implícitamente.
-\section{Paradigmas}
-Programación imperativa procedural utilizando funciones y estructurado.
+\subsection{Lenguajes relacionados}
+Este lenguaje se basará principalmente en C, ya que es un lenguaje que permite la gestión de la mermoria manual lo que provoca (si el programador lo hace adecuadamente) una gestión eficiente de la memoria.En este lenguaje se pretenderá básicamente un cálculo eficiente y paralelo(por eso también nos basaremos en OpenCL) para así poder enfocar el lenguaje al cálculo matemático.\\
+También nos inspiraremos en Matlab a la hora de implementar en el lenguaje y aprovechando openCL, operadores propios de imágenes.Estos operadores serán transformaciones, umbralizado, suavizado, convoluciones...
+\section{Paradigma}
+Programación imperativa procedural utilizando funciones y estructurado.\\
+Se descarga un paradigma de más alto nivel como la Programación orientada a objetos ya que esa encapsulacion no es necesaria ya que la finalidad de este lenguaje es el cálculo eficiente y en problemas de carácter matemático no es necesario ese nivel de abstracción. Además sería contraproducente ya que a la hora de gestionar memoria y que se envía o no a GPU sería mas complejo para el programador hacerlo a mano, sin un recolector de basura(por ejepmlo) que eliminase la memoria que se reservó y ya no está en uso.
 \section{Gestión de memoria}
 Manual, se especifican tamaños o se inicializan las variables con un valor
-determinado. El uso y la limpieza de la memoria corren a cargo del programador.Como en C la gestión de la memoria en tiempo de compilación se hará en la inicialización y la asignación dinámica(en tiempo de ejecución) se hará donde el programador considere oportuno.
+determinado. El uso y la limpieza de la memoria corren a cargo del programador.Como en C la gestión de la memoria en tiempo de compilación se hará en la inicialización y la asignación dinámica(en tiempo de ejecución) se hará donde el programador considere oportuno.\\
+A la hora de liberar memoria se hará como en C, prescindiremos de cualquier mecanismo interno de gestión de memoria.Que a la par que útiles también pueden a llegar a ser inoportunos en algunos sistemas críticos.Con estos métodos la memoria permanece retenida durante más tiempo de el necesario, Ya que estes métodos consumen CPU y producen pausas lo que lo hacen incompatibles con sistemas en tiempo real.
 \section{Sistema de tipos}
 Tipado estático, deben especificarse todos los tipos de las variables. En las
 matrices se deben especificar sus dimensiones y su tipo, que sólo puede ser uno
-no se permiten matrices heterogéneas.La comprobación de la tipificación sera en tiempo de compilación por lo que la hará el compilador.Este sistema de tipos incrementa la fiabilidad de los programas procesados.
+no se permiten matrices heterogéneas.La comprobación de la tipificación sera en tiempo de compilación por lo que la hará el compilador.Este sistema de tipos incrementa la fiabilidad de los programas procesados.\\
+Los lenguajes de tipado estático incrementan el tiempo de desarrollo.Pero una ventaja de estos lenguajes es el ser compilados, al traducirse directamente a lenguaje de maquina y manejar grandes cantidades de datos hace una diferencia de eficiencia frente a los de tipado dinámico.
 \section{Tipos de dato}
 \subsection{Básicos}
 \begin{itemize}
@@ -200,6 +204,12 @@ optimizar más nuestro código.
  \\ También se incluyen operadores para la sincronización entre procesos y
  bloqueos para la posible concurrencia a una misma variable.Tarea que el
  planificador en las operaciones implementadas hará automáticamente.
+ \subsection{Evaluación en cortocircuíto}
+ La evaluación de cortocircuito, es algo que el lenguaje de programación incorpora ya que es de gran utilidad ya que evita calculos innecesarios.\\
+ Esta evaluación es sumamente sencilla de implementar:\\
+ Para el operador AND se evalúa el primer operando y se pospone la evaluación de los siguientes ya que si este primero es falso, da igual el resultado de los siguientes ya que, el resultado total de la sentencia será falso. Y así sucesivamente.\\
+ Para el operador OR se evaluará el primer operando y se pospone la evaluación de los siguientes, ya que, si este es verdadero el resultado total de la sentencia será verdadero y no será necesario seguir evaluándola.
+ \\ Se podría implementar (por versatilidad), con otros operadores la eager evaluation, que seria evaluar la sentencia entera siempre. Su implementación seria "\&\&" para lazy y "\&" para eager evaluation, pero esto a la hora de aprender el lenguaje para un programador novel sería confuso.
 \section{Programas o trozos de código}
 \subsection{Suma de vectores}
 Ejemplo sin paralelizar:
@@ -341,6 +351,10 @@ Cuanto más grande sea la matriz o el vector, más se aprecia la aceleración en
 paralelo.
 \section{Necesidades especiales}
 \subsection{IDE}
+Un IDE con todo lo que el lenguaje necesitase para ser elaborado(editor de código, un compilador y un depurador) sería lo ideal para el desarrollo del lenguaje ya que agilizaría el codificado de nuestros programas.\\
+Gráficamente, sería del estilo de los IDEs clásicos pero con una gran similitud al de Matlab ya que, para las matrices el Workspace de variables de matlab, junto con la consola interactiva, el debug de cosas sencillas es extremadamente útil.\\
+También cabría la posibilidad de que, en lugar de tener un IDE propio, construir un plugin para un IDE conocido.
+
 \subsection{Debug}
 Se puede compilar de forma secuencial en la CPU para así poder depurar sin
 problemas en algoritmo en una primera versión y después poder optimizar el cálculo haciéndolo de forma paralela. Esto se propone debido a que el debug de un procesamiento paralelo es tedioso.
@@ -368,7 +382,8 @@ transformará el dato en el tipo necesario(si es posible) solo sí el dato de
 donde se va a almacenar es el correcto.
 \subsection{Errores}
 A la hora de un error en la CPU es de fácil gestión, pero en la GPU nos
-tendremos que asegurar de que la salída del programa es civilizada.
+tendremos que asegurar de que la salída del programa es civilizada.\\
+A pesar de que con los lenguajes orientados a objetos las excepciones están substituyendo a los códigos de error, nosotros utilizaremos los códigos de error.Dejando a juicio del programador la posible negligencia de no comprobar los valores de retorno para mirar si la función falló.
 \section{Fuentes}
 \begin{itemize}
 \item \href{https://www.khronos.org/assets/uploads/developers/library/overview/opencl_overview.pdf}{ Funcionamiento OpenCL}
@@ -376,5 +391,10 @@ tendremos que asegurar de que la salída del programa es civilizada.
 \item Transformar operaciones de Matrices para GPU:
 \item \href{https://www.khronos.org/assets/uploads/developers/library/overview/opencl_overview.pdf#page=8}{Funcionamiento GPU}
 \item \href{https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#page=51}{Modificadores de tipos}
+\item \href{https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#page=6}{Tipos de datos Escalares en OpenCL}
+\item \href{https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#page=9}{Tiposde datos para Vectores en OpenCL}
+\item \href{https://www.khronos.org/registry/cl/specs/opencl-2.0-openclc.pdf#page=50}{Visibilidad OpenCL}
+\item \href{http://en.wikipedia.org/wiki/Eager_evaluation}{Eager Evaluation}
+\item \href{http://en.wikipedia.org/wiki/Lazy_evaluation}{Lazy Evaluation(cortocircuíto)}
 \end{itemize}
 \end{document}
