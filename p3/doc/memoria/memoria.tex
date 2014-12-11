@@ -195,8 +195,12 @@ Errores :
 \section{Programas o trozos de código}
 \section{Características}
 \subsection{Inserción de código OpenCL}
-Además de la programación normal del lenguaje, se permitirá añadir trozos de código directamente en OpenCL, que nos permiten manejar la GPU manualmente y así optimizar más nuestro código. 
- \\ También se incluyen operadores para la sincronización entre procesos y bloqueos para la posible concurrencia a una misma variable.Tarea que el planificador en las operaciones implementadas hará automáticamente.
+Además de la programación normal del lenguaje, se permitirá añadir trozos de
+código directamente en OpenCL, que nos permiten manejar la GPU manualmente y así
+optimizar más nuestro código. 
+ \\ También se incluyen operadores para la sincronización entre procesos y
+ bloqueos para la posible concurrencia a una misma variable.Tarea que el
+ planificador en las operaciones implementadas hará automáticamente.
 \subsection{Suma de vectores}
 Ejemplo sin paralelizar:
 \begin{lstlisting}
@@ -258,7 +262,8 @@ C = A * B;
 
 Ejemplo de kernel para la multiplicación en OpenCL:
 \begin{lstlisting}
-__kernel void matrix_mul(__global float* A, __global float* B, __global float* C,  int widthA, int widthB )
+__kernel void matrix_mul(__global float* A, __global float* B, 
+	__global float* C,  int widthA, int widthB )
 {
     int i = get_global_id(0);
     int j = get_global_id(1);
@@ -271,46 +276,65 @@ __kernel void matrix_mul(__global float* A, __global float* B, __global float* C
 }
 \end{lstlisting}
 \section{Pruebas de ejecución}
-A continuación se muestran algunos resultados, al ejecutarse en secuencia, o en
+A continuación se muestran algunos resultados, para la multiplicación de matrices, al ejecutarse en secuencia, o en
 paralelo:
 
 \begin{lstlisting}
-Tamano de matriz: 1024x1024
-Tamano de grupo: 128x128
+Tamaño de matriz: 64x64
+GPU envío:      4.070000E+02 us
+GPU comp.:      1.159000E+03 us
+GPU recep.:     3.410000E+02 us
+GPU total:      2.148000E+03 us
+GPU total:      2148.000000 us
 
-Paralelo:
-GPU envio:      5.546000E+03 us
-GPU comp.:      2.000000E+00 us
-GPU recep.:     6.047000E+03 us
-GPU total:      1.187700E+04 us
-GPU total:      11877.000000 us = 11.8 ms
+CPU comp.:      3.190000E+02 us
+CPU comp.:      319.000000 us
 
-Secuencial:
-CPU comp.:      1.192175E+07 us
-CPU comp.:      11921751.000000 us = 11.9 s
-
-Aceleracion:    1003.767871
+Aceleración:    0.148510
 Fallos comp.:   0
+Max err.:       0.000000E+00
+----------------------------------------
+Tamaño de matriz: 512x512
+GPU envío:      2.384000E+03 us
+GPU comp.:      3.621100E+04 us
+GPU recep.:     1.562000E+03 us
+GPU total:      4.046600E+04 us
+GPU total:      40466.000000 us
 
+CPU comp.:      3.352140E+05 us
+CPU comp.:      335214.000000 us
 
-
-Tamano de matriz: 2048x2048
-Tamano de grupo: 512x512
-
-Paralelo:
-GPU envio:      2.188400E+04 us
-GPU comp.:      1.000000E+01 us
-GPU recep.:     1.793400E+04 us
-GPU total:      4.010200E+04 us
-GPU total:      40102.000000 us = 40.1 ms
-
-Secuencial:
-CPU comp.:      1.114093E+08 us
-CPU comp.:      111409292.000000 us = 111.4 s = 1 min 25 s
-
-Aceleracion:    2778.148023
+Aceleración:    8.283843
 Fallos comp.:   0
+Max err.:       0.000000E+00
+-----------------------------------------
+Tamaño de matriz: 1024x1024
+GPU envío:      5.669000E+03 us
+GPU comp.:      3.109710E+05 us
+GPU recep.:     5.350000E+03 us
+GPU total:      3.222790E+05 us
+GPU total:      322279.000000 us
 
+CPU comp.:      1.205548E+07 us
+CPU comp.:      12055485.000000 us
+
+Aceleración:    37.406983
+Fallos comp.:   0
+Max err.:       0.000000E+00
+----------------------------------------
+Tamaño de matriz: 2048x2048
+GPU envío:      2.168600E+04 us
+GPU comp.:      2.418712E+06 us
+GPU recep.:     1.743300E+04 us
+GPU total:      2.458115E+06 us
+GPU total:      2458115.000000 us = 2.46 s
+
+CPU comp.:      1.115366E+08 us
+CPU comp.:      111536649.000000 us = 111.5 s = 1 min 51 s
+
+Aceleración:    45.374870
+Fallos comp.:   0
+Max err.:       0.000000E+00
 \end{lstlisting}
 
 Cuanto más grande sea la matriz o el vector, más se aprecia la aceleración en
