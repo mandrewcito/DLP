@@ -65,34 +65,56 @@
 
 \clearpage 
 
+
+
 \section{Introducción}
-Este lenguaje, que está enfocado a las operaciones matemáticas pretende utilizar al máximo la capacidad de la GPU que tenga el ordenador que lo ejecute para así liberar de cálculos a la CPU y así hacer  una ejecución más eficiente. A grandes rasgos, vamos a hacer un lenguaje como C pero añadiendole funcionalidades como multiplicación de matrices.
+En este documento se propone un lenguaje de programación orientado al cálculo 
+numérico. La sintaxis es idéntica a C, con nuevas funcionalidades.
+
+El objetivo consiste en explotar la capacidad de las máquinas modernas de 
+realizar computaciones en paralelo. Tanto de las tarjetas gráficas (GPU) como de 
+los procesadores multinúcleo (CPU). Y emplear esta capacidad para acelerar los 
+procesos de cómputo que sean paralelizables y así hacer una ejecución más 
+eficiente.
+
+En concreto, se introducirán operaciones como el cálculo de productos 
+matriciales, o operaciones vectoriales, realizadas en paralelo implícitamente.
 \section{Paradigmas}
-Programación imperativa utilizando funciones.
+Programación imperativa procedural utilizando funciones y estructurado.
 \section{Gestión de memoria}
-Manual, se especifican tamaños o se inicializan las variables con un valor determinado.A la hora de liberar el espacio de las variables se operará
+Manual, se especifican tamaños o se inicializan las variables con un valor
+determinado. El uso y la limpieza de la memoria corren a cargo del programador.
 \section{Sistema de tipos}
-Tipado estático, deben especificarse todos los tipos de las variables. En las matrices se deben especificar sus dimensiones y su tipo, que sólo puede ser uno no se permiten matrices heterogeneas. 
+Tipado estático, deben especificarse todos los tipos de las variables. En las
+matrices se deben especificar sus dimensiones y su tipo, que sólo puede ser uno
+no se permiten matrices heterogeneas. 
 \section{Tipos de dato}
 \subsection{Básicos}
 \begin{itemize}
-\item Int.
-\item Double.
-\item Float.
-\item Char.
-\item Punteros a tipos básicos(como en C).
+\item int
+\item double
+\item float
+\item char
+\item void
+\item Punteros a tipos básicos (como en C).
 \end{itemize}
 \subsection{Complejos}
 \begin{itemize}
-\item Vectores.
-\item Matrices.
-\item Números imaginarios.
+\item vector
+\item matrix
+\item complex
 \end{itemize}
 \subsection{Modificadores de Tipos}
-Existirán unos modificadores que permitirán compartir un determinado dato con la GPU para así, en caso de que sea frecuentemente usado, evitar el tiempo de enviarlo reiteradamente.
+Existirán unos modificadores que permitirán compartir un determinado dato con la
+GPU para así, en caso de que sea frecuentemente usado, evitar el tiempo de
+enviarlo reiteradamente.
 \section{Operadores}
 \subsection{Tabla de operadores}
-Para utilizar la GPU al máximo, lo más adecuado sería utilizar una tabla de operadores como la de openCL. A mayores se incorporarán las funciones típicas de imágenes, como convoluciones y filtros. En estos últimos se podrán aprovechar al máximo las propiedades de las gráficas como el acceso a la memoria de los núcleos vecinos.
+Para utilizar la GPU al máximo, lo más adecuado sería utilizar una tabla de
+operadores como la de openCL. A mayores se incorporarán las funciones típicas de
+imágenes, como convoluciones y filtros. En estos últimos se podrán aprovechar al
+máximo las propiedades de las gráficas como el acceso a la memoria de los
+núcleos vecinos.
 \\
 \begin{tabular}{ l c r }
   add & + \\
@@ -129,30 +151,38 @@ Para utilizar la GPU al máximo, lo más adecuado sería utilizar una tabla de o
 \end{tabular}
 \subsection{Sobrecarga operadores}
 \subsubsection{Introducción}
-Se añaden (sobrecargando los operadores) las operaciones con vectores y matrices. El compilador podrá detectar posibles errores gracias al tipado estático.
+Se añaden (sobrecargando los operadores) las operaciones con vectores y
+matrices. El compilador podrá detectar posibles errores gracias al tipado
+estático.
 \subsubsection{Operadores vectoriales}
-Suma, multiplicación y resta. Estos operadores funcionarían con los tipos vector y matriz, pero también para su multiplicación por un escalar.
+Suma, multiplicación y resta. Estos operadores funcionarían con los tipos vector
+y matriz, pero también para su multiplicación por un escalar.
 \section{Visibilidad}
 \subsection{Visibilidad Local}
-A nivel de función, la variable es accesible y puede manipulada sólo en la función que es declarada. 
+A nivel de función, la variable es accesible y puede manipulada sólo en la
+función que es declarada. 
 \subsection{Visibilidad Global}
-A nivel de programa,la variable es accesible y puede ser  manipulada en todo el programa.
+A nivel de programa,la variable es accesible y puede ser  manipulada en todo el
+programa.
 \section{Tratamiento de errores}
 \subsection{Matemáticos}
-Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
+compilador).
 Errores :
 \begin{itemize}
 \item División entre 0.
 \item Raíz de un número negativo(sin ser el destino un número imaginario).
 \end{itemize}
 \subsection{Overflow}
-Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
+compilador).
 Errores :
 \begin{itemize}
 \item algo
 \end{itemize}
 \subsection{Segmentación}
-Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el compilador).
+Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
+compilador).
 Errores :
 \begin{itemize}
 \item Desreferenciación punteros NULL.
@@ -163,23 +193,155 @@ Errores :
 \item Usando punteros no inicializados.
 \end{itemize}
 \section{Programas o trozos de código}
+\subsection{Suma de vectores}
+Ejemplo sin paralelizar:
+\begin{lstlisting}
+#define N 100
+
+float A[N], B[N], C[N];
+int i;
+
+for(i = 0; i < N; i++)
+	C[i] = A[i] + B[i];
+\end{lstlisting}
+
+Ejemplo paralelizado:
+\begin{lstlisting}
+#define N 100
+
+float A[N], B[N], C[N];
+
+C = A + B;
+\end{lstlisting}
+
+Ejemplo de kernel para la suma de vectores en OpenCL:
+\begin{lstlisting}
+__kernel void vector_add(__global const int *A, __global const int *B, __global int *C)
+{ 
+    int i = get_global_id(0);
+ 
+    C[i] = A[i] + B[i];
+}
+\end{lstlisting}
+\subsection{Multiplicación de matrices}
+Ejemplo sin paralelizar:
+\begin{lstlisting}
+#define N 100
+
+float A[N][N], B[N][N], C[N][N];
+float sum = 0.0;
+int i, j, k;
+
+for(i = 0; i < N; i++) {
+	for(j = 0; j < N; j++) {
+		sum = 0;
+		for(k = 0; k < widthB; k++)
+			sum += A[i][k] * B[k][j];
+		C[i][j] = sum;
+	}
+
+}
+\end{lstlisting}
+
+Ejemplo paralelizado:
+\begin{lstlisting}
+#define N 100
+
+float A[N][N], B[N][N], C[N][N];
+
+C = A * B;
+\end{lstlisting}
+
+Ejemplo de kernel para la multiplicación en OpenCL:
+\begin{lstlisting}
+__kernel void matrix_mul(__global float* A, __global float* B, __global float* C,  int widthA, int widthB )
+{
+    int i = get_global_id(0);
+    int j = get_global_id(1);
+    float value=0;
+    for(int k = 0; k < widthA; k++)
+    {
+        value = value + A[k + j * widthA] * B[k*widthB + i];
+    }
+    C[i + widthA * j] = value;
+}
+\end{lstlisting}
+\section{Pruebas de ejecución}
+A continuación se muestran algunos resultados, al ejecutarse en secuencia, o en
+paralelo:
+
+\begin{lstlisting}
+Tamano de matriz: 1024x1024
+Tamano de grupo: 128x128
+
+Paralelo:
+GPU envio:      5.546000E+03 us
+GPU comp.:      2.000000E+00 us
+GPU recep.:     6.047000E+03 us
+GPU total:      1.187700E+04 us
+GPU total:      11877.000000 us = 11.8 ms
+
+Secuencial:
+CPU comp.:      1.192175E+07 us
+CPU comp.:      11921751.000000 us = 11.9 s
+
+Aceleracion:    1003.767871
+Fallos comp.:   0
+
+
+
+Tamano de matriz: 2048x2048
+Tamano de grupo: 512x512
+
+Paralelo:
+GPU envio:      2.188400E+04 us
+GPU comp.:      1.000000E+01 us
+GPU recep.:     1.793400E+04 us
+GPU total:      4.010200E+04 us
+GPU total:      40102.000000 us = 40.1 ms
+
+Secuencial:
+CPU comp.:      1.114093E+08 us
+CPU comp.:      111409292.000000 us = 111.4 s = 1 min 25 s
+
+Aceleracion:    2778.148023
+Fallos comp.:   0
+
+\end{lstlisting}
+
+Cuanto más grande sea la matriz o el vector, más se aprecia la aceleración en
+paralelo.
+
 \section{Ventajas y desventajas}
 \subsection{Características}
-Además de la programación normal del lenguaje, se permitirá añadir trozos de código directamente en OpenCL, que nos permiten manejar la GPU manualmente y así optimizar más nuestro código. \\
-También se incluyen operadores para la sincronización entre procesos y bloqueos para la posible concurrencia a una misma variable.Tarea que el planificador en las operaciones implementadas hará automáticamente.
+Además de la programación normal del lenguaje, se permitirá añadir trozos de
+código directamente en OpenCL, que nos permiten manejar la GPU manualmente y así
+optimizar más nuestro código. \\
+También se incluyen operadores para la sincronización entre procesos y bloqueos
+para la posible concurrencia a una misma variable.Tarea que el planificador en
+las operaciones implementadas hará automáticamente.
 \subsection{Optimizaciones en cálculos}
 Añadimos el paralelismo de la GPU para agilizar los cálculos de matrices y vectores. 
 \section{Necesidades especiales}
 \subsection{IDE}
 \subsection{Puntos de interrupción}
-Se puede compilar de forma secuencial en la CPU para así poder depurar sin problemas y después poder optimizar el cálculo haciéndolo de forma paralela.
+Se puede compilar de forma secuencial en la CPU para así poder depurar sin
+problemas y después poder optimizar el cálculo haciéndolo de forma paralela.
 \subsection{Gráfica}
-Necesidad de una targeta gráfica que soporte OpenCL para poder utilizar la ejecución en paralelo.
+Necesidad de una targeta gráfica que soporte OpenCL para poder utilizar la
+ejecución en paralelo.
 \section{Arquitectura}
 \subsection{Compilador}
-Se dispondría de una especie de planificador, que detectaría el código paralelo, lo dispondría en forma de grafo de ejecución.Una vez identificadas las partes que pueden ir en paralelo, con esas partes se dividirían en bloques en función al hardware disponible y posteriormente se enviarían al a GPU.\\
-El codigo paraĺelo es especificado por el programador a través de los operadores específicos(los operadores vectorialess).\\
-En caso de hacer una operación entre tipos diferentes, el compilador transformará el dato en el tipo necesario(si es posible) solo sí el dato de donde se va a almacenar es el correcto.
+Se dispondría de una especie de planificador, que detectaría el código paralelo,
+lo dispondría en forma de grafo de ejecución.Una vez identificadas las partes
+que pueden ir en paralelo, con esas partes se dividirían en bloques en función
+al hardware disponible y posteriormente se enviarían al a GPU.\\
+El codigo paraĺelo es especificado por el programador a través de los operadores
+específicos(los operadores vectorialess).\\
+En caso de hacer una operación entre tipos diferentes, el compilador
+transformará el dato en el tipo necesario(si es posible) solo sí el dato de
+donde se va a almacenar es el correcto.
 \subsection{Errores}
-A la hora de un error en la CPU es de fácil gestión, pero en la GPU nos tendremos que asegurar de que la salída del programa es civilizada.
+A la hora de un error en la CPU es de fácil gestión, pero en la GPU nos
+tendremos que asegurar de que la salída del programa es civilizada.
 \end{document}
