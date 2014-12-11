@@ -220,14 +220,14 @@ float A[N], B[N], C[N];
 int i;
 
 for(i = 0; i < N; i++)
-	C[i] = A[i] + B[i];
+    C[i] = A[i] + B[i];
 \end{lstlisting}
 
 Ejemplo paralelizado:
 \begin{lstlisting}
 #define N 100
 
-float A[N], B[N], C[N];
+vector float A[N], B[N], C[N];
 
 C = A + B;
 \end{lstlisting}
@@ -251,12 +251,12 @@ float sum = 0.0;
 int i, j, k;
 
 for(i = 0; i < N; i++) {
-	for(j = 0; j < N; j++) {
-		sum = 0;
-		for(k = 0; k < widthB; k++)
-			sum += A[i][k] * B[k][j];
-		C[i][j] = sum;
-	}
+    for(j = 0; j < N; j++) {
+        sum = 0;
+        for(k = 0; k < widthB; k++)
+            sum += A[i][k] * B[k][j];
+        C[i][j] = sum;
+    }
 
 }
 \end{lstlisting}
@@ -265,7 +265,7 @@ Ejemplo paralelizado:
 \begin{lstlisting}
 #define N 100
 
-float A[N][N], B[N][N], C[N][N];
+matrix float A[N][N], B[N][N], C[N][N];
 
 C = A * B;
 \end{lstlisting}
@@ -283,6 +283,100 @@ __kernel void matrix_mul(__global float* A, __global float* B,
         value = value + A[k + j * widthA] * B[k*widthB + i];
     }
     C[i + widthA * j] = value;
+}
+\end{lstlisting}
+
+\subsection{Operador Sobel en imágenes}
+
+Porción de código secuencial:
+\begin{lstlisting}
+for (i = mr; i < 256 - mr; i++)
+{
+    for(j = mr; j < 256 - mr; j++)
+    {
+        sum1 = 0;
+        sum2 = 0;
+        for(p = -mr; p <= mr; p++)
+        {
+            for(q = -mr; q <= mr; q++)
+            {
+                sum1 += pic[i+p][j+q] * maskx[p+mr][q+mr];
+                sum2 += pic[i+p][j+q] * masky[p+mr][q+mr];
+            }
+        }
+        outpicx[i][j] = sum1;
+        outpicy[i][j] = sum2;
+    }
+}
+\end{lstlisting}
+
+Código de ejemplo paralelizado, usando los operadores:
+\begin{lstlisting}
+matrix uint8 I, S;
+
+S = sobel(I, 100);
+\end{lstlisting}
+
+Código OpenCL para la ejecución paralela de el filtro Sobel.
+\begin{lstlisting}
+__kernel
+__attribute__((task))
+void sobel(global unsigned int * restrict frame_in, global unsigned int * restrict frame_out,
+           const int iterations, const unsigned int threshold)
+{
+    // Filter coefficients
+    int Gx[3][3] = {{-1,-2,-1},{0,0,0},{1,2,1}};
+    int Gy[3][3] = {{-1,0,1},{-2,0,2},{-1,0,1}};
+
+    // Pixel buffer of 2 rows and 3 extra pixels
+    int rows[2 * COLS + 3];
+
+    int count = 0;
+    while (count != iterations) {
+        // Each cycle, shift a new pixel into the buffer.
+        // Unrolling this loop allows the compile to infer a shift register.
+        #pragma unroll
+        for (int i = COLS * 2 + 2; i > 0; --i) {
+            rows[i] = rows[i - 1];
+        }
+        rows[0] = frame_in[count];
+
+        int x_dir = 0;
+        int y_dir = 0;
+
+        // With these loops unrolled, one convolution can be computed every
+        // cycle.
+        #pragma unroll
+        for (int i = 0; i < 3; ++i) {
+            #pragma unroll
+            for (int j = 0; j < 3; ++j) {
+                unsigned int pixel = rows[i * COLS + j];
+                unsigned int b = pixel & 0xff;
+                unsigned int g = (pixel >> 8) & 0xff;
+                unsigned int r = (pixel >> 16) & 0xff;
+
+                // RGB -> Luma conversion approximation
+                // Avoiding floating point math operators greatly reduces
+                // resource usage.
+                unsigned int luma = r * 66 + g * 129 + b * 25;
+                luma = (luma + 128) >> 8;
+                luma += 16;
+
+                x_dir += luma * Gx[i][j];
+                y_dir += luma * Gy[i][j];
+            }
+        }
+
+        int temp = abs(x_dir) + abs(y_dir);
+        unsigned int clamped;
+        if (temp > threshold) {
+            clamped = 0xffffff;
+        } else {
+            clamped = 0;
+        }
+
+        frame_out[count++] = clamped;
+    }
 }
 \end{lstlisting}
 \section{Pruebas de ejecución}
