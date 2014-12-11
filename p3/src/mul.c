@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
 	}
 	
 	printf("Tamaño de matriz: %dx%d\n", n, n);
+	printf("Tamaño de grupo: %dx%d\n", nl, nl);
 
 	//printm("A", A, widthA, heightA);
 	//printm("B", B, widthB, heightB);
