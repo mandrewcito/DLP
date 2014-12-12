@@ -6,6 +6,8 @@
 
 % Usar codificación utf-8 para acentos y otros.
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 
 %Dimensiones de los márgenes.
 \usepackage[margin=1.5cm]{geometry}
@@ -50,7 +52,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Propiedades
-\title{Diseño de un lenguaje de Programación}
+\title{Lenguaje de programación para cálculo paralelo.}
 
 \author{Andrés Baamonde Lozano (andres.baamonde@udc.es)\\
 	Rodrigo Arias Mallo (rodrigo.arias@udc.es)}
@@ -66,8 +68,12 @@
 
 \clearpage 
 
+
+
 \section{Introducción}
-\subsection{Propósito y contextualización}
+
+\subsection
+{Propósito y contextualización}
 En este documento se propone un lenguaje de programación orientado al cálculo 
 numérico. La sintaxis es idéntica a C, con nuevas funcionalidades.
 
@@ -78,23 +84,101 @@ procesos de cómputo que sean paralelizables y así hacer una ejecución más ef
 
 En concreto, se introducirán operaciones como el cálculo de productos 
 matriciales, o operaciones vectoriales, realizadas en paralelo implícitamente.
-\subsection{Lenguajes relacionados}
-Este lenguaje se basará principalmente en C, ya que es un lenguaje que permite la gestión de la mermoria manual lo que provoca (si el programador lo hace adecuadamente) una gestión eficiente de la memoria.En este lenguaje se pretenderá básicamente un cálculo eficiente y paralelo(por eso también nos basaremos en OpenCL) para así poder enfocar el lenguaje al cálculo matemático.\\
-También nos inspiraremos en Matlab a la hora de implementar en el lenguaje y aprovechando openCL, operadores propios de imágenes.Estos operadores serán transformaciones, umbralizado, suavizado, convoluciones...
+
+\subsection
+{Lenguajes relacionados}
+El lenguaje se basará principalmente en C, ya que es un lenguaje que permite
+la gestión de la memoria manual lo que provoca (si el programador lo hace
+adecuadamente) una gestión eficiente de la memoria.
+
+C se caracteriza por permitir la codificación de un programa convirtiendo cada 
+línea en unas pocas instrucciones de código máquina, lo cual permite realizar la 
+programación final de un algoritmo, prácticamente describiendo las 
+instrucciones. De esta forma, es el programador quien tiene la responsabilidad 
+de hacer la programación cuidadosa y adecuada.
+
+En este lenguaje se pretende añadir al cálculo eficiente, pero secuencial, que 
+permite el lenguaje C, la posibilidad de realizar uno paralelo, basándose en 
+OpenCL. De esta forma se enfoca el lenguaje al cálculo matemático eficiente.
+
+Algunas ideas provienen también de Matlab, concretamente los operadores propios 
+de imágenes, que se realizarán empleando código con OpenCL. Estos operadores 
+serán transformaciones, umbralizado, suavizado, convoluciones, etc. Que se 
+implementarán directamente en el lenguaje, a modo de funciones. El propósito de 
+estos operadores es el de facilitar el análisis de datos, dentro del mismo 
+lenguaje, para permitir aprovechar el paralelismo.
+
+
+
 \section{Paradigma}
-Programación imperativa procedural utilizando funciones y estructurado.\\
-Se descarga un paradigma de más alto nivel como la Programación orientada a objetos ya que esa encapsulacion no es necesaria ya que la finalidad de este lenguaje es el cálculo eficiente y en problemas de carácter matemático no es necesario ese nivel de abstracción. Además sería contraproducente ya que a la hora de gestionar memoria y que se envía o no a GPU sería mas complejo para el programador hacerlo a mano, sin un recolector de basura(por ejepmlo) que eliminase la memoria que se reservó y ya no está en uso.
+Programación imperativa procedural utilizando funciones y estructurado.
+
+Se descarga un paradigma de más alto nivel como la programación orientada a 
+objetos ya que esa encapsulación no es necesaria. La finalidad de este lenguaje 
+es el cálculo eficiente y en problemas de carácter matemático no es adecuado ese 
+nivel de abstracción.
+
+Los problemas de una programación orientada a objetos, es que los núcleos en los 
+que se van a ejecutar los códigos, han de ser los más sencillos posibles. Pues 
+resultaría en una gran penalización de memoria y tiempo de transferencia operar 
+directamente con objetos en la GPU.
+
+Sería mas complejo para el programador hacerlo a mano, sin un recolector de 
+basura (por ejemplo) que eliminase la memoria que se reservó y ya no está en 
+uso. Sin embargo se considera una eleción de diseño, en virtud de la velocidad 
+de ejecución.
+
+
+
 \section{Gestión de memoria}
-Manual, se especifican tamaños o se inicializan las variables con un valor
-determinado. El uso y la limpieza de la memoria corren a cargo del programador.Como en C la gestión de la memoria en tiempo de compilación se hará en la inicialización y la asignación dinámica(en tiempo de ejecución) se hará donde el programador considere oportuno.\\
-A la hora de liberar memoria se hará como en C, prescindiremos de cualquier mecanismo interno de gestión de memoria.Que a la par que útiles también pueden a llegar a ser inoportunos en algunos sistemas críticos.Con estos métodos la memoria permanece retenida durante más tiempo de el necesario, Ya que estes métodos consumen CPU y producen pausas lo que lo hacen incompatibles con sistemas en tiempo real.
+La memoria se gestiona de forma manual. Esto quiere decir que para emplear una 
+variable, ha de conocerse su tamaño previamente. Si se trata de vectores o 
+matrices, han de especificarse sus dimensiones. El propósito es, conociendo las 
+dimensiones de una matriz, poder realizar las operaciones en paralelo 
+distribuyendo el trabajo según su tamaño.
+
+El uso y la limpieza de la memoria corren a cargo del programador. Como en C la 
+gestión de la memoria en tiempo de compilación se hará en la inicialización y la 
+asignación dinámica (en tiempo de ejecución) se hará donde el programador 
+considere oportuno.
+
+A la hora de liberar memoria se hará como en C, prescindiremos de cualquier 
+mecanismo interno de gestión de memoria. Sin embargo están a disposición las 
+funciones de la libc, como free, malloc, realloc, o calloc, que permitirán una 
+gestión semi-automática.
+
+La gestión dinámica y automática de la memoria se ha rechazado. Con estos 
+métodos la memoria permanece retenida durante más tiempo que el necesario.  
+Además consumen recursos adicionales y producen pausas, que lo hacen 
+incompatibles con sistemas en tiempo real.
+
+
+
 \section{Sistema de tipos}
-Tipado estático, deben especificarse todos los tipos de las variables. En las
-matrices se deben especificar sus dimensiones y su tipo, que sólo puede ser uno
-no se permiten matrices heterogéneas.La comprobación de la tipificación sera en tiempo de compilación por lo que la hará el compilador.Este sistema de tipos incrementa la fiabilidad de los programas procesados.\\
-Los lenguajes de tipado estático incrementan el tiempo de desarrollo.Pero una ventaja de estos lenguajes es el ser compilados, al traducirse directamente a lenguaje de maquina y manejar grandes cantidades de datos hace una diferencia de eficiencia frente a los de tipado dinámico.
+Se emplea un tipado estático, deben especificarse todos los tipos de las 
+variables.
+
+En las matrices se deben especificar sus dimensiones y su tipo. Además han de 
+ser homogéneas, esto es, que todos los elementos son del mismo tipo.
+
+Todas las comprobaciones de tipos, se ralizarán en tiempo de compilación por lo 
+que las hará el compilador. Este sistema de tipos incrementa la fiabilidad de 
+los programas procesados. Además, una comprobación exhaustiva, previene los 
+errores.
+
+Los lenguajes de tipado estático incrementan el tiempo de desarrollo. Pero una 
+ventaja de estos lenguajes es que una vez compilados, no se requiere ninguna 
+comprobación en tiempo de ejecución. Por lo que al traducirse directamente a 
+lenguaje máquina y manejar grandes cantidades de datos, permite una mejora de 
+eficiencia frente a los de tipado dinámico.
+
+
+
 \section{Tipos de dato}
-\subsection{Básicos}
+
+\subsection
+{Básicos}
+
 \begin{itemize}
 \item int
 \item double
@@ -103,20 +187,43 @@ Los lenguajes de tipado estático incrementan el tiempo de desarrollo.Pero una v
 \item void
 \item Punteros a tipos básicos (como en C).
 \end{itemize}
-\subsection{Complejos}
+
+\subsection
+{Complejos}
+
+Además de los tipos clásicos de C, se añaden matrices y vectores, y un nuevo 
+tipo de números, para los complejos.
+
 \begin{itemize}
 \item vector
 \item matrix
 \item complex
 \end{itemize}
-\subsection{Modificadores de Tipos}
-Existirán unos modificadores que permitirán compartir un determinado dato con la
-GPU para así, en caso de que sea frecuentemente usado, evitar el tiempo de
-enviarlo reiteradamente.
+
+\subsection
+{Modificadores de tipos}
+
+Dada la arquitectura actual de los ordenadores, existen varias memorias en los 
+que se permiten almacenar variables. Algunas permiten compartir la misma memoria 
+RAM, con la GPU, haciendo innecesaria la transmisión de datos a la tarjeta.
+
+Para indicar que una variable se puede usar en esta memoria compartida, se 
+emplea el modificador <<shared>>. Este indica al compilador que, en caso de 
+resultar eficiente, no copie la variable a la memoria interna de la GPU, si no 
+que la lea y modifique directamente en la RAM.
+
+Por defecto las variables son enviadas a las memorias de los distintos 
+procesadores, donde se realizan las operaciones, y posteriormente enviadas de 
+vuelta a la memoria principal.
+
+
+
 \section{Operadores}
-\subsection{Tabla de operadores}
+
+\subsection
+{Tabla de operadores}
 Para utilizar la GPU al máximo, lo más adecuado sería utilizar una tabla de
-operadores como la de openCL. A mayores se incorporarán las funciones típicas de
+operadores como la de OpenCL. A mayores se incorporarán las funciones típicas de
 imágenes, como convoluciones y filtros. En estos últimos se podrán aprovechar al
 máximo las propiedades de las gráficas como el acceso a la memoria de los
 núcleos vecinos.
@@ -156,61 +263,159 @@ núcleos vecinos.
   assignment & = \\	
 \end{tabular}
 \end{center}
-\subsection{Sobrecarga operadores}
+
+\subsection
+{Sobrecarga operadores}
+
 \subsubsection{Introducción}
 Se añaden (sobrecargando los operadores) las operaciones con vectores y
 matrices. El compilador podrá detectar posibles errores gracias al tipado
 estático.
+
 \subsubsection{Operadores vectoriales}
 Suma, multiplicación y resta. Estos operadores funcionarían con los tipos vector
 y matriz, pero también para su multiplicación por un escalar.
+
+
+
 \section{Visibilidad}
-\subsection{Visibilidad Local}
-A nivel de función, la variable es accesible y puede manipulada sólo en la
+
+\subsection
+{Visibilidad local}
+A nivel de función, la variable es accesible y puede ser manipulada sólo en la
 función que es declarada. 
-\subsection{Visibilidad Global}
-A nivel de programa,la variable es accesible y puede ser  manipulada en todo el
+
+\subsection
+{Visibilidad global}
+A nivel de programa, la variable es accesible y puede ser manipulada en todo el
 programa.
+
+
+
 \section{Tratamiento de errores}
+
+Al ejecutar código en paralelo, ha de tenerse especial cuidado al realizar 
+paradas de emergencia. En una CPU basta con interrumpir el proceso actual. Sin 
+embargo para detener la ejecución de muchos hilos en paralelo, ha de coordinarse 
+una parada global.
+
+Para ello, el compilador añade un fragmento de código en el programa, que se 
+ejecuta cuando este recibe una interrupción, o una señal de parada. Este código 
+permite detener todas las ejecuciones pendientes, y terminar el programa.
+
 \subsection{Matemáticos}
-Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
-compilador).
-Errores :
 \begin{itemize}
-\item División entre 0.
-\item Raíz de un número negativo(sin ser el destino un número imaginario).
+\item Operaciones matemáticas que provocan una pérdida de precisión superior a 
+	un umbral prefijado.
+\item Raíz de un número negativo (sin ser el destino un número imaginario).
 \end{itemize}
-\subsection{Overflow}
-Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
-compilador).\\
-Estos errores se  producen cuando  un programa no controla adecuadamente la cantidad de datos que se copian sobre un área de memoria reservada a tal efecto.Si esa cantidad es superior a la anteriormente asignada los bytes se almacenan contiguamente pisando el contenido que pudiera existir previamente.
-\subsection{Segmentación}
+
+\subsection {Desbordamiento}
+Estos errores se producen cuando un programa no controla adecuadamente la 
+cantidad de datos que se copian sobre un área de memoria reservada a tal efecto. 
+Si esa cantidad es superior a la anteriormente asignada los bytes se almacenan 
+contiguamente pisando el contenido que pudiera existir previamente.
+
+Para evitar estos errores, el compilador realiza una tarea de comprobación.  
+Consiste en los siguientes pasos. Primero coloca una constante en el espacio 
+contiguo, posterior al área de destino. Después procede a ejecutar el código de 
+escritura. Luego comprueba que el valor de la constante resulte ser el que había 
+antes de la escritura, y si es así, se deduce que no se ha sobreescrito ningún 
+valor fuera del área especificada. En caso contrario lanza una excepción que 
+aborta el programa.
+
+Ejemplo sin protección:
+
+Antes de la escritura:
+\begin{lstlisting}
+[ variable A ][ variable B][ variable C ]
+[000000000000][11111111111][222222222222]
+\end{lstlisting}
+
+Después, con desbordamiento. La variable B ha sido modificada:
+\begin{lstlisting}
+[ variable A ][ variable B][ variable C ]
+[777777777777][77777777111][222222222222]
+\end{lstlisting}
+
+Ejemplo con protección:
+
+Antes de la escritura:
+\begin{lstlisting}
+[ variable A ][ A? ][ variable B][ B? ][ variable C ][ C? ]
+[000000000000][1234][11111111111][1234][222222222222][1234]
+\end{lstlisting}
+
+Después, con desbordamiento:
+\begin{lstlisting}
+[ variable A ][ A? ][ variable B][ B? ][ variable C ][ C? ]
+[777777777777][7777][77771111111][1234][222222222222][1234]
+\end{lstlisting}
+
+Después de la escritura se comprueba que el valor <<A?>> coincida con el 
+anterior, en este caso era <<1234>>. Como no coincide, se ha detectado un 
+desbordamiento, y se aborta el programa.
+
+\subsection
+{Segmentación}
 Se lanza una excepción que interrumpe el programa automáticamente (Lo hace el
 compilador).
 Errores :
 \begin{itemize}
-\item Desreferenciación punteros NULL.
+\item Desreferenciación de punteros NULL.
 \item Intento de acceder a memoria que el programa no tiene permisos.
 \item Intentar acceder a una dirección de memoria inexistente.
 \item Intentar escribir memoria de sólo lectura.
-\item Un desbordamiento de búfer. 
-\item Usando punteros no inicializados.
+\item Un desbordamiento de búfer.
+\item Uso de punteros no inicializados.
 \end{itemize}
+
+
+
 \section{Características}
-\subsection{Inserción de código OpenCL}
+
+\subsection
+{Inserción de código OpenCL}
 Además de la programación normal del lenguaje, se permitirá añadir trozos de
 código directamente en OpenCL, que nos permiten manejar la GPU manualmente y así
-optimizar más nuestro código. 
- \\ También se incluyen operadores para la sincronización entre procesos y
- bloqueos para la posible concurrencia a una misma variable.Tarea que el
- planificador en las operaciones implementadas hará automáticamente.
- \subsection{Evaluación en cortocircuíto}
- La evaluación de cortocircuito, es algo que el lenguaje de programación incorpora ya que es de gran utilidad ya que evita calculos innecesarios.\\
- Esta evaluación es sumamente sencilla de implementar:\\
- Para el operador AND se evalúa el primer operando y se pospone la evaluación de los siguientes ya que si este primero es falso, da igual el resultado de los siguientes ya que, el resultado total de la sentencia será falso. Y así sucesivamente.\\
- Para el operador OR se evaluará el primer operando y se pospone la evaluación de los siguientes, ya que, si este es verdadero el resultado total de la sentencia será verdadero y no será necesario seguir evaluándola.
- \\ Se podría implementar (por versatilidad), con otros operadores la eager evaluation, que seria evaluar la sentencia entera siempre. Su implementación seria "\&\&" para lazy y "\&" para eager evaluation, pero esto a la hora de aprender el lenguaje para un programador novel sería confuso.
+optimizar más nuestro código.
+
+También se incluyen operadores para la sincronización entre hilos y bloqueos 
+para la posible concurrencia a una misma variable. Tarea que el planificador en 
+las operaciones implementadas hará automáticamente.
+ 
+\subsection
+{Evaluación en cortocircuíto}
+La evaluación de cortocircuito, es algo que el lenguaje de programación 
+incorpora ya que es de gran utilidad ya que evita calculos innecesarios.
+
+Esta evaluación es sumamente sencilla de implementar:
+
+Para el operador AND se evalúa el primer operando y se pospone la evaluación de 
+los siguientes ya que si este primero es falso, da igual el resultado de los 
+siguientes ya que, el resultado total de la sentencia será falso. Y así 
+sucesivamente.
+
+Para el operador OR se evaluará el primer operando y se pospone la evaluación 
+de los siguientes, ya que, si este es verdadero el resultado total de la 
+sentencia será verdadero y no será necesario seguir evaluándola.
+
+Se podría implementar (por versatilidad) con otros operadores la <<eager 
+evaluation>>, que sería evaluar la sentencia entera siempre. Su implementación 
+consistiría en añadir un punto detrás del operador en cuestión, por ejemplo:
+
+\begin{lstlisting}
+if((a |. b) &. c)
+\end{lstlisting}
+
+
+
 \section{Programas o trozos de código}
+A continuación se muestran algunos programas sencillos, para la operación de 
+vectores, matrices e imágenes. Primero se muestra el código en C original, luego 
+la versión en nuestro lenguaje, y por último, el código OpenCL que implementa la 
+parte paralela.
+
 \subsection{Suma de vectores}
 Ejemplo sin paralelizar:
 \begin{lstlisting}
@@ -241,7 +446,9 @@ __kernel void vector_add(__global const int *A, __global const int *B, __global 
     C[i] = A[i] + B[i];
 }
 \end{lstlisting}
-\subsection{Multiplicación de matrices}
+
+\subsection
+{Multiplicación de matrices}
 Ejemplo sin paralelizar:
 \begin{lstlisting}
 #define N 100
@@ -286,9 +493,11 @@ __kernel void matrix_mul(__global float* A, __global float* B,
 }
 \end{lstlisting}
 
-\subsection{Operador Sobel en imágenes}
 
-Porción de código secuencial:
+\subsection
+{Operador Sobel en imágenes}
+
+Porción de código secuencial del algoritmo de Sobel:
 \begin{lstlisting}
 for (i = mr; i < 256 - mr; i++)
 {
@@ -310,14 +519,14 @@ for (i = mr; i < 256 - mr; i++)
 }
 \end{lstlisting}
 
-Código de ejemplo paralelizado, usando los operadores:
+Código de ejemplo paralelizado, usando los operadores de imágenes:
 \begin{lstlisting}
-matrix uint8 I, S;
+matrix uint8 I[1024][768], S[1024][768];
 
 S = sobel(I, 100);
 \end{lstlisting}
 
-Código OpenCL para la ejecución paralela de el filtro Sobel.
+Código OpenCL para la ejecución paralela del filtro Sobel.
 \begin{lstlisting}
 __kernel
 __attribute__((task))
@@ -379,9 +588,13 @@ void sobel(global unsigned int * restrict frame_in, global unsigned int * restri
     }
 }
 \end{lstlisting}
+
+
+
 \section{Pruebas de ejecución}
-A continuación se muestran algunos resultados, para la multiplicación de matrices, al ejecutarse en secuencia, o en
-paralelo:
+A continuación se muestran algunos resultados reales, para la multiplicación de 
+matrices, al ejecutarse en secuencia, o en paralelo. La operación que se realiza 
+es la multiplicación de matrices antes mencionada.
 
 \begin{lstlisting}
 Tamano de matriz: 64x64
@@ -442,42 +655,131 @@ Max err.:       0.000000E+00
 \end{lstlisting}
 
 Cuanto más grande sea la matriz o el vector, más se aprecia la aceleración en
-paralelo.
-\section{Necesidades especiales}
-\subsection{IDE}
-Un IDE con todo lo que el lenguaje necesitase para ser elaborado(editor de código, un compilador y un depurador) sería lo ideal para el desarrollo del lenguaje ya que agilizaría el codificado de nuestros programas.\\
-Gráficamente, sería del estilo de los IDEs clásicos pero con una gran similitud al de Matlab ya que, para las matrices el Workspace de variables de matlab, junto con la consola interactiva, el debug de cosas sencillas es extremadamente útil.\\
-También cabría la posibilidad de que, en lugar de tener un IDE propio, construir un plugin para un IDE conocido.
+paralelo. También se observa que el tiempo de transferencia aumenta 
+considerablemente con el tamaño de la matriz.
 
-\subsection{Debug}
+Para una comprobación posterior, en cada simulación se comprueba que ambas 
+matrices (la calculada con la CPU y GPU), coincidan.
+
+
+
+\section{Necesidades especiales}
+
+\subsection
+{IDE}
+Un IDE con todo lo que el lenguaje necesitase para ser elaborado (editor de
+código, un compilador y un depurador) sería lo ideal para el desarrollo del
+lenguaje ya que agilizaría el codificado de nuestros programas.
+
+Gráficamente, sería del estilo de los IDEs clásicos pero con una gran similitud 
+al de Matlab ya que, para las matrices el Workspace de variables de matlab, 
+junto con la consola interactiva, el debug de cosas sencillas es extremadamente 
+útil.
+
+También cabría la posibilidad de que, en lugar de tener un IDE propio, construir 
+un plugin para un IDE conocido.
+
+Además, para el diseño de algoritmos paralelos, sería adecuado disponer de 
+alguna herramienta que permita dibujar a modo de grafo, la ejecución en paralelo 
+o secuencial de las distintas partes del código. Aunque queda fuera del alcance 
+de este documento.
+
+
+\subsection
+{Debug}
 Se puede compilar de forma secuencial en la CPU para así poder depurar sin
-problemas en algoritmo en una primera versión y después poder optimizar el cálculo haciéndolo de forma paralela. Esto se propone debido a que el debug de un procesamiento paralelo es tedioso.
+problemas en algoritmo en una primera versión y después poder optimizar el
+cálculo haciéndolo de forma paralela. Esto se propone debido a que el debug de
+un procesamiento paralelo es tedioso.
+
+
 \subsection{Puntos de interrupción}
-Al parar el proceso podemos inspeccionar el valor de las variables, los argumentos de la pila, y las direcciones de memoria sin que el proceso modifique estos valores hasta que no se lo indicas de esa forma al depurador.\\
-También podemos inspeccionar el valor de los registros del procesador e incluso podemos cambiar cualquier dato tanto en los registros como en la memoria si queremos. Los breakpoints son sin duda la característica más comúnmente utilizada en un depurador. Por lo que serán incorporados a nuestro lenguaje.
-\\ Existen dos tipos de breakpoints:
+Al parar el proceso podemos inspeccionar el valor de las variables, los 
+argumentos de la pila, y las direcciones de memoria sin que el proceso modifique 
+estos valores hasta que no se lo indicase de esa forma el depurador.
+
+También podemos inspeccionar el valor de los registros del procesador e incluso 
+podemos cambiar cualquier dato tanto en los registros como en la memoria si 
+queremos.
+
+Los breakpoints son sin duda la característica más comúnmente utilizada en un 
+depurador. Por lo que serán incorporados al depurador de nuestro lenguaje.  
+Existen dos tipos de breakpoints:
 \begin{itemize}
-\item software breakpoints(se usan específicamente para detener la CPU cuando se ejecuta una instrucción)
-\item hardware breakpoints(a nivel de procesador no implementados por un lenguaje)
+\item software breakpoints (se usan específicamente para detener la CPU cuando 
+	se ejecuta una instrucción)
+\item hardware breakpoints (a nivel de procesador no implementados por un 
+	lenguaje)
 \end{itemize}
-\subsection{Gráfica}
-Necesidad de una targeta gráfica que soporte OpenCL para poder utilizar la
-ejecución en paralelo.
+
+\subsection{Dispositivos para el procesado paralelo}
+Está claro que para realizar cálculos en paralelo necesitaremos contar con más 
+de un núcleo, para procesar varias instrucciones a la vez.
+
+Para ello los ordenadores actuales cuentan con un procesador, que suele disponer 
+de varios núcleos, y también una o más tarjetas gráficas o GPU.
+
+Además todos ellos deben ser compatibles con OpenCL. Para ello el fabricante ha 
+de proveer la implementación que corresponde para dicho dispositivo. Sin 
+embargo, la mayoría de fabricantes incluyen OpenCL en todos sus dispositivos 
+actuales.
+
+
+
 \section{Arquitectura}
+
 \subsection{Compilador}
-Se dispondría de una especie de planificador, que detectaría el código paralelo,
-lo dispondría en forma de grafo de ejecución.Una vez identificadas las partes
-que pueden ir en paralelo, con esas partes se dividirían en bloques en función
-al hardware disponible y posteriormente se enviarían al a GPU.\\
-El codigo paraĺelo es especificado por el programador a través de los operadores
-específicos(los operadores vectorialess).\\
-En caso de hacer una operación entre tipos diferentes, el compilador
-transformará el dato en el tipo necesario(si es posible) solo sí el dato de
-donde se va a almacenar es el correcto.
+Ya que el lenguaje es una mejora de C, sería recomendable basarse en un 
+compilador de C existente, al que añadir las mejoras.
+
+Para compilar el código paralelo, es necesario primero identificar aquellos 
+fragmentos que sean paralelizables. También es importante detectar que zonas han 
+de terminar su ejecución antes que otras, por lo que debe construirse un grafo 
+de ejecución.
+
+En este grafo, los nodos forman las instrucciones o grupos de instrucciones que 
+se ejecutan como un bloque. Y las aristas forman un árbol de dependencias, que 
+representan la necesidad de cubrir los nodos anteriores antes de ejecutar el 
+actual.
+
+Estos grafos permiten la optimización de código e instrucciones inútiles. Por 
+ejemplo, incrementar una variable en un bucle que nunca se usa.
+
+Los bloques que se ejecutarán en paralelo, son tratados de forma especial. Se 
+divide el bloque en partes. Se crea una cola de trabajo donde se introducen 
+todas las partes que deben ser procesadas. A cada núcleo se le asigna una parte.  
+De forma que cuando alguno termine, se le asigna la siguiente parte que contiene 
+la cola. El proceso termina cuando la cola está vacía, y todos los núcleos han 
+terminado su ejecución.
+
+El codigo paralelo es especificado por el programador a través de los tipos 
+especiales para matrices y vectores.
+
+Para la realización de operaciones entre tipos diferentes, el compilador realiza 
+una conversión automática, siempre que sea posible. Por ejemplo de entero a 
+flotante.
+
 \subsection{Errores}
-A la hora de un error en la CPU es de fácil gestión, pero en la GPU nos
-tendremos que asegurar de que la salída del programa es civilizada.\\
-A pesar de que con los lenguajes orientados a objetos las excepciones están substituyendo a los códigos de error, nosotros utilizaremos los códigos de error.Dejando a juicio del programador la posible negligencia de no comprobar los valores de retorno para mirar si la función falló.
+Cuando se produce una excepción en la CPU, es fácil detener la ejecución del 
+programa, si éste es secuencial. Sin embargo, cuando se trabaja con varios hilos 
+de procesamiento, la excepción en uno de ellos, implica la detención de todos 
+los demás.
+
+Esto se realiza empleando un sistema de bloqueos, que detiene todo el programa, 
+y espera a que todos los núcleos hayan terminado y se hayan detenido antes de la 
+terminación del programa principal.
+
+A pesar de que con los lenguajes orientados a objetos las excepciones están 
+substituyendo a los códigos de error, nosotros no implementaremos estas 
+excepciones.
+
+Cuando una excepción se produce, es el hardware el que avisa de tal evento, y 
+empleando una tabla de excepciones, el CPU o GPU, es la encargada de transmitir 
+el tipo de excepción, que nuestro lenguaje recogerá, y abortará el programa 
+adecuadamente.
+
+
+
 \section{Fuentes}
 \begin{itemize}
 \item \href{https://www.khronos.org/assets/uploads/developers/library/overview/opencl_overview.pdf}{ Funcionamiento OpenCL}
