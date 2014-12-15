@@ -1,0 +1,166 @@
+% Usar el tipo de documento: Artículo científico.
+\documentclass{beamer}
+
+% Cargar mensajes en español.
+\usepackage[spanish]{babel}
+
+% Usar codificación utf-8 para acentos y otros.
+\usepackage[utf8]{inputenc}
+
+%Dimensiones de los márgenes.
+%\usepackage[margin=1.5cm]{geometry}
+
+% Insertar porciones de código
+\usepackage{listings}
+
+% Comenzar párrafos con separación no indentación.
+\usepackage{parskip}
+%enlaces
+\usepackage{hyperref}
+% Usar gráficos
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+%
+% Usar contenedores flotantes para figuras.
+\usepackage{float}
+
+% Carpeta de las imágenes.
+\graphicspath{{img/}}
+
+% Configuración para porciones de código.
+\lstset{
+%	language=bash,
+	basicstyle=\ttfamily\small,
+%	numberstyle=\footnotesize,
+%	numbers=left,
+%	backgroundcolor=\color{gray!10},
+%	frame=single,
+	tabsize=4,
+%	rulecolor=\color{black!30},
+%	title=\lstname,
+%	escapeinside={\%*}{*)},
+	breaklines=true,
+	breakatwhitespace=true,
+%	framextopmargin=2pt,
+%	framexbottommargin=2pt,
+	extendedchars=false,
+	inputencoding=utf8
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Propiedades
+\title{Lenguaje de programación para cálculo paralelo.}
+
+\author{Andrés Baamonde Lozano (andres.baamonde@udc.es)\\
+	Rodrigo Arias Mallo (rodrigo.arias@udc.es)}
+
+\begin{document}
+
+%\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\clearpage 
+
+%\tableofcontents
+
+%\clearpage 
+
+\begin{frame}
+\frametitle{Diapo 1}
+\framesubtitle{A bit more information about this}
+Texto a pelo
+
+\end{frame}
+
+\begin{frame}
+%\frametitle{GPGPU}
+
+GPGPU =
+
+General	Purpose computing on Graphics Processing Units
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Rápida introducción a GPGPU en 3 pasos}
+
+\begin{itemize}
+\item Enviamos datos desde la RAM a la GPU.
+\item La GPU realiza operaciones en su memoria interna.
+\item Transferimos los datos de la GPU a la RAM.
+\end{itemize}
+
+Nota: La GPU tiene una memoria interna.
+
+\end{frame}
+%\begin{frame}
+%## Procesamiento paralelo.
+%
+%1. La GPU tiene muchos núcleos.
+%2. Pero sólo tiene una memoria.
+%3. Enviamos datos, y un programa común.
+%4. Cada núcleo ejecuta el mismo programa,
+%	con diferentes datos
+%
+%\end{frame}
+%\begin{frame}
+%## Dónde está la mejora? Ejemplo de matrices.
+%
+%A, B y C son matrices de NxN. Disponemos de P núcleos.
+%Calcular C = A * B. Complejidad O(n^3).
+%
+%1. Dividir la matriz C en bloques de P elementos.
+%2. Asignar cada elemento (i,j) del bloque a un núcleo:
+%3. Repetir para todos los bloques.
+%
+%Procesamiento paralelo, en cada núcleo:
+%	
+%	C[i][j] = 0;
+%	for(k = 0; k < N; k++)
+%		C[i][j] += A[i][k] * B[k][j]
+%
+%Complejidad final de O(n^3 / P)
+%
+%\end{frame}
+%\begin{frame}
+%## Ejemplo de filtro.
+%
+%Cada núcleo ejecuta un pequeño programa, como sumar los valores
+%de los píxeles vecinos.
+%
+%El resultado se almacena en un lugar aparte, sin modificar la original.
+%
+%Todos los núcleos se pueden ejecutar en paralelo.
+%
+%La imagen resultante, regresa a la RAM.
+%
+%\end{frame}
+%\begin{frame}
+%## Problema
+%
+%Sabemos resolver muchos problemas, empleando algoritmos secuenciales.
+%Convertir un algoritmo a uno paralelo, requiere replantearlo.
+%
+%\end{frame}
+%\begin{frame}
+%## Solución?
+%
+%Realizar cambios mecánicamente en el código secuencial para "vectorizar" aquello
+%que sea posible. Posible rama de investigación, "vectorización".
+%
+%Ejemplo:
+%
+%	for(i = 0; i < N; i++)
+%	{
+%		A[i]++;
+%		A[N-1-i]++;
+%	}
+%
+%El optimizador debe ser capaz de deducir:
+%
+%	A = A + 2;
+%
+%\end{frame}
+
+\end{document}
